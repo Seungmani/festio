@@ -1,6 +1,36 @@
 # 콘서트 정보 검색 웹 사이트 festio
 [노션 링크](https://www.notion.so/e273980c10414efdb62e0667822771bb?d=748129315fa941b3bbd851a87e1df232)
 
+## project structure
+```text
+/src
+-/components
+-- Header
+-- Login
+-- Register
+-- Main
+-- ConcertInfo
+-- UserProper
+-- Mypage
+
+-/redux
+-- store
+
+-/router
+-- Router
+
+-/ hooks
+
+-/ components
+
+-/ pages
+-- Login
+-- Register
+-- Main
+-- ConcertInfo
+-- UserProper
+-- Mypage
+```
 
 ## commit prefix
 1-1. 코드 관련
