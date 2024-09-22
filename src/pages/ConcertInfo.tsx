@@ -1,4 +1,6 @@
-const ConcertInfo = () :JSX.Element  => {
+import styled from '@emotion/styled';
+
+const ConcertInfo = () :JSX.Element => {
 	return (
 		<div>
 			ConcertInfo

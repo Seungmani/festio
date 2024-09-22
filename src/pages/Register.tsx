@@ -1,4 +1,6 @@
-const Register = () :JSX.Element  => {
+import styled from '@emotion/styled';
+
+const Register = () :JSX.Element => {
 	return (
 		<div>
 			Register

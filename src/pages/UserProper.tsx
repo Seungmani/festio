@@ -1,4 +1,6 @@
-const UserProper = () :JSX.Element  => {
+import styled from '@emotion/styled';
+
+const UserProper = () :JSX.Element => {
 	return (
 		<div>
 			UserProper

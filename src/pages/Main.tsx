@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
+import styled from '@emotion/styled';
 
-const Main = () :JSX.Element  => {
+const Main = () :JSX.Element => {
 	return (
 		<div>
 			Main

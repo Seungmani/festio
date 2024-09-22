@@ -1,4 +1,6 @@
-const Mypage = () :JSX.Element  => {
+import styled from '@emotion/styled';
+
+const Mypage = () :JSX.Element => {
 	return (
 		<div>
 			Mypage
