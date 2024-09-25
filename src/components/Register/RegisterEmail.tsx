@@ -22,6 +22,7 @@ const RegisterEmail = React.memo(({ email, setEmail }: EmailInputProps): JSX.Ele
 export default RegisterEmail;
 
 const H2 = styled.h2`
+  margin: 0;
   margin-bottom: 5px;
   font-size: 20px;
 `

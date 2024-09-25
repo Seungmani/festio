@@ -3,35 +3,37 @@ import RegisterEmail from "./RegisterEmail";
 import RegisterPassword from "./RegisterPassword";
 import RegisterPasswordCheck from "./RegisterPasswordCheck";
 import RegisterName from "./RegisterName";
-import { useCallback, useState } from "react";
+import RegisterPhone from "./RegisterPhone";
+import React, { useState } from "react";
+import Button from "../Common/Button";
 
-const RegisterForm = (): JSX.Element => {
+const RegisterForm = React.memo((): JSX.Element => {
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
-	const [password2, setPassword2] = useState<string>("");
-	const [passwordCheck, setPasswordCheck] = useState<boolean>(false);
+	const [passwordConfirm, setPasswordConfirm] = useState<string>("");
 	const [name, setName] = useState<string>("");
+	const [phone, setPhone] = useState<string>("");
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		console.log("Email:", email);
 		console.log("Password:", password);
+		console.log("passwordConfirm:", passwordConfirm);
 		console.log("name:", name);
+		console.log("phone:", phone);
 	}
-
-	const checkPassword = useCallback((): void => {
-		setPasswordCheck(password === password2);
-	}, [password2, password])
 
 	return (
 		<Form onSubmit={handleSubmit}>
 			<RegisterEmail email={email} setEmail={setEmail}/>
 			<RegisterPassword password={password} setPassword={setPassword}/>
-			<RegisterPasswordCheck password={password2} setPassword={setPassword2} passwordCheck={passwordCheck} checkPassword={checkPassword}/>
+			<RegisterPasswordCheck password={password} passwordConfirm={passwordConfirm} setPasswordConfirm={setPasswordConfirm}/>
 			<RegisterName name={name} setName={setName}/>
+			<RegisterPhone phone={phone} setPhone={setPhone}/>
+			<Button width="232px" height="44px" text={"회원 가입"} />
 		</Form>
 	)
-};
+});
 
 export default RegisterForm;
 
@@ -39,5 +41,6 @@ const Form = styled.form`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	align-items: center;
+
+	margin-top: 20px;
 `

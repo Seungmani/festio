@@ -20,18 +20,18 @@ const StyledButton = styled.button<{ width: string; height: string }>`
 	height: ${(props) => props.height};
 	line-height: ${(props) => props.height};
 
-	margin: 20px 10px 0px 10px;
+	margin: 10px auto;
 
 	border-radius: 30px;
 	border: none;
 
 	font-size: 24px;
 	text-align: center;
-	color: ${Color.white};
-	background-color: ${Color.Main};
+	color: ${Color.WHITE};
+	background-color: ${Color.MAIN};
 
 	:hover {
-		color: ${Color.black};
+		color: ${Color.BLACK};
 		cursor: pointer;
 	}
 `

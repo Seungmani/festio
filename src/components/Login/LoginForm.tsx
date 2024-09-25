@@ -10,7 +10,6 @@ const LoginForm = React.memo((): JSX.Element => {
 
 	const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-		// 로그인 api 연동
 		console.log("Email:", email);
 		console.log("Password:", password);
   }

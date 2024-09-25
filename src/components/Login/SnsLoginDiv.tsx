@@ -9,9 +9,9 @@ import SnsLink from './SnsLink'
 const SnsLoginDiv = ():JSX.Element => {
 	return (
 		<SNS>
-			<SnsLink text={"카카오"} src={kakao} color={Color.kakao}/>
-			<SnsLink text={"구글"} src={google} color={Color.black}/>
-			<SnsLink text={"네이버"} src={naver} color={Color.naver}/>
+			<SnsLink text={"카카오"} src={kakao} color={Color.KAKAO}/>
+			<SnsLink text={"구글"} src={google} color={Color.BLACK}/>
+			<SnsLink text={"네이버"} src={naver} color={Color.NAVER}/>
 		</SNS>
 	)
 }

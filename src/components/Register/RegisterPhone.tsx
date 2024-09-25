@@ -3,36 +3,36 @@ import styled from "@emotion/styled";
 import Input from "../Common/Input";
 import Error from "../Common/Error";
 
-interface NameInputProps {
-	name: string;
-	setName: (email: string) => void;
+interface PhoneInputProps {
+	phone: string;
+	setPhone: (email: string) => void;
 }
 
-const RegisterName = React.memo(({ name, setName }: NameInputProps): JSX.Element => {
+const RegisterPhone = React.memo(({ phone, setPhone }: PhoneInputProps): JSX.Element => {
   const [isTouched, setIsTouched] = useState<boolean>(false);
 
 	const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
+    setPhone(String(e.target.value));
     if (!isTouched) setIsTouched(true);
   };
 
   return (
 		<>
-			<H2>이름</H2>
+			<H2>번호</H2>
 			<Input
       type="text"
-      placeholder="이름"
-      value={name}
+      placeholder="번호"
+      value={phone}
       onChange={handleNameChange}
-      errorMessage={name!=="" && !name ? "이름을 입력해주세요." : ""}
+      errorMessage={phone!=="" && !phone ? "-없이 입력해주세요" : ""}
       isTouched={isTouched}
     />
-    <Error errorMessage={name!=="" && !name ? "이름을 입력해주세요." : ""} />
+    <Error errorMessage={phone!=="" && !phone ? "-없이 입력해주세요" : ""} />
 		</>
   );
 })
 
-export default RegisterName;
+export default RegisterPhone;
 
 const H2 = styled.h2`
   margin: 0;

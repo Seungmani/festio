@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
-import Input from "../Common/Input";
 import RegExp from "../../constants/Reg";
+import Error from "../Common/Error";
+import Input from "../Common/Input";
 
 interface PasswordInputProps {
 	password: string;
@@ -24,16 +25,19 @@ const PasswordInput = React.memo(({ password, setPassword }: PasswordInputProps)
   };
 
   return (
-    <Input
-      type={showPassword ? "text" : "password"}
-      placeholder="비밀번호"
-      value={password}
-      onChange={handlePasswordChange}
-      errorMessage={passwordErrorText}
-      showToggle={true}
-      toggleShow={() => setShowPassword(!showPassword)}
-      isTouched={isTouched}
-    />
+    <>
+      <Input
+        type={showPassword ? "text" : "password"}
+        placeholder="비밀번호"
+        value={password}
+        onChange={handlePasswordChange}
+        errorMessage={passwordErrorText}
+        showToggle={true}
+        toggleShow={() => setShowPassword(!showPassword)}
+        isTouched={isTouched}
+      />
+      <Error errorMessage={passwordErrorText}/>
+    </>
   );
 })
 

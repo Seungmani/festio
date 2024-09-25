@@ -23,7 +23,7 @@ export default GreyContainer;
 const FullDiv = styled.div`
   width: 100%;
 	height: 100%;
-	background-color: ${Color.background};
+	background-color: ${Color.GREY};
 
 	overflow: hidden;
 `
@@ -41,6 +41,6 @@ const Container = styled.div<{ width: string; height: string }>`
 	left: 50%;
 	transform: translate(-50%, -50%);
 	
-	background-color: ${Color.white};
+	background-color: ${Color.WHITE};
 	border-radius: 15px;
 `

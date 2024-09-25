@@ -1,19 +1,20 @@
 import styled from "@emotion/styled";
 import React from "react";
+import Color from "../../constants/Color";
 
 interface ErrorMessageProps {
 	errorMessage: string;
 }
 
-const ErrorMessage = React.memo(({errorMessage}: ErrorMessageProps): JSX.Element => {
+const Error = React.memo(({errorMessage}: ErrorMessageProps): JSX.Element => {
 	return (
 		<ErrorDiv>
-			<ErrorText errorMessage={errorMessage || ""}>{errorMessage}</ErrorText>
+			<ErrorText errorMessage={errorMessage}>{errorMessage}</ErrorText>
 		</ErrorDiv>
 	)
 })
 
-export default ErrorMessage;
+export default Error;
 
 const ErrorDiv = styled.div`
 	width: 256px;
@@ -24,7 +25,7 @@ const ErrorDiv = styled.div`
 
 const ErrorText = styled.p<{errorMessage: string}>`
   font-size: 12px;
-  color: ${(props) => props.errorMessage ? `red` : "white"};
+  color: ${(props) => props.errorMessage !== "" ? Color.RED : Color.WHITE};
 	white-space: pre-wrap;
 	margin: 0
 `

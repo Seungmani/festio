@@ -1,19 +1,21 @@
 interface ColorType {
-	Main: string;
-	background: string;
-	white: string;
-	black: string;
-	naver: string;
-	kakao: string;
+	MAIN: string;
+	GREY: string;
+	WHITE: string;
+	BLACK: string;
+	NAVER: string;
+	KAKAO: string;
+	RED: string
 }
 
 const Color: Readonly<ColorType> = Object.freeze({
-	Main: "#77DD77",
-	background: "#D9D9D9",
-	white: "#ffffff",
-	black: "#000000",
-	naver: "#03C75B",
-	kakao:  "#FFE90A",
+	MAIN: "#77DD77",
+	GREY: "#D9D9D9",
+	WHITE: "#ffffff",
+	BLACK: "#000000",
+	NAVER: "#03C75B",
+	KAKAO:  "#FFE90A",
+	RED: "red",
 });
 
 export default Color;

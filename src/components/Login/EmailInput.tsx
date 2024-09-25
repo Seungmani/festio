@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
-import Input from "../Common/Input";
 import RegExp from "../../constants/Reg";
+import Error from "../Common/Error";
+import Input from "../Common/Input";
 
 interface EmailInputProps {
 	email: string;
@@ -11,10 +12,7 @@ const EmailInput = React.memo(({ email, setEmail }: EmailInputProps): JSX.Elemen
 	const [emailErrorText, setEmailErrorText] = useState<string>("");
   const [isTouched, setIsTouched] = useState<boolean>(false);
 	
-	const validateEmail = useCallback((value: string): boolean => {
-		if (value === "") return true;
-		return !RegExp.ID.test(value);
-	}, [])
+	const validateEmail = useCallback((value: string): boolean => !RegExp.ID.test(value), [])
 
 	const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -23,15 +21,13 @@ const EmailInput = React.memo(({ email, setEmail }: EmailInputProps): JSX.Elemen
   };
 
   return (
-    <Input
-      type="text"
-      placeholder="아이디"
-      value={email}
-      onChange={handleEmailChange}
-      errorMessage={emailErrorText}
-      isTouched={isTouched}
-    />
-    
+    <>
+      <Input type="text" placeholder="아이디"
+        value={email} onChange={handleEmailChange}
+        errorMessage={emailErrorText} isTouched={isTouched}
+      />
+      <Error errorMessage={emailErrorText}/>
+    </>
   );
 })
 

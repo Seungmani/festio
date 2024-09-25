@@ -20,6 +20,7 @@ const RegisterPassword = React.memo(({ password, setPassword }: PasswordInputPro
 export default RegisterPassword;
 
 const H2 = styled.h2`
+  margin: 0;
   margin-bottom: 5px;
   font-size: 20px;
 `

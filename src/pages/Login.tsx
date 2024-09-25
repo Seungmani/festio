@@ -15,9 +15,9 @@ const Login = () :JSX.Element => {
 				<Logo>Festio</Logo>
 				<LoginForm />
 				<FlexRow>
-					<StyledLink to="#"><P>비밀번호 찾기</P></StyledLink>
-					<P> / </P>
-					<StyledLink to="/register"><P>회원가입</P></StyledLink>
+					<StyledLink to="#"><Text>비밀번호 찾기</Text></StyledLink>
+					<Text> / </Text>
+					<StyledLink to="/register"><Text>회원가입</Text></StyledLink>
 				</FlexRow>
 				<SnsLoginDiv />
 			</DIV>
@@ -27,15 +27,16 @@ const Login = () :JSX.Element => {
 
 export default Login;
 
-const Logo = styled.h1`
-  margin-top: 30px;
-	font-size: 32px;
-  color: ${Color.Main};
-	text-align: center;
-`
 const DIV = styled.div`
 	width: 300px;
 	margin: 0 auto;
+`
+
+const Logo = styled.h1`
+  margin-top: 30px;
+	font-size: 32px;
+  color: ${Color.MAIN};
+	text-align: center;
 `
 
 const FlexRow = styled.div`
@@ -49,7 +50,7 @@ const StyledLink = styled(Link)`
 	margin: 10px 0;
 
 	text-decoration: none;
-	color: ${Color.black};
+	color: ${Color.BLACK};
 	white-space: pre-wrap;
 
 	:hover {
@@ -57,7 +58,7 @@ const StyledLink = styled(Link)`
 	}
 `
 
-const P = styled.p`
+const Text = styled.p`
 	white-space: pre-wrap;
 	font-size: 12px;
 `
