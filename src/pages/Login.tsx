@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import LoginForm from '../components/Login/LoginForm';
 import SnsLoginDiv from '../components/Login/SnsLoginDiv';
-import GreyContainer from '../components/GreyContainer';
+import GreyContainer from '../components/Common/GreyContainer';
 
 
 const Login = () :JSX.Element => {

@@ -1,6 +1,6 @@
 import EmailInput from "./EmailInput";
 import PasswordInput from "./PasswordInput";
-import Button from "../Button";
+import Button from "../Common/Button";
 import React, { useCallback, useState } from "react";
 import styled from '@emotion/styled';
 

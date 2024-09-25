@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import Color from "../constants/Color";
+import Color from "../../constants/Color";
 
 interface ButtonProps {
 	text: string;

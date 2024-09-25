@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import React from "react";
 
 interface ErrorMessageProps {
-	errorMessage?: string;
+	errorMessage: string;
 }
 
 const ErrorMessage = React.memo(({errorMessage}: ErrorMessageProps): JSX.Element => {

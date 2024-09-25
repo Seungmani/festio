@@ -1,34 +1,37 @@
 import React, { useCallback, useState } from "react";
-import LoginInput from "./LoginInput";
+import Input from "../Common/Input";
+import RegExp from "../../constants/Reg";
 
 interface EmailInputProps {
 	email: string;
 	setEmail: (email: string) => void;
 }
 
-const emailReg = /^[A-Za-z0-9_.-]+@[A-Za-z0-9-]+\.[A-za-z0-9-]+/;
-
 const EmailInput = React.memo(({ email, setEmail }: EmailInputProps): JSX.Element => {
-	const [emailError, setEmailError] = useState<boolean>(false);
+	const [emailErrorText, setEmailErrorText] = useState<string>("");
+  const [isTouched, setIsTouched] = useState<boolean>(false);
 	
 	const validateEmail = useCallback((value: string): boolean => {
-		if (value === "") return false;
-		return !emailReg.test(value);
+		if (value === "") return true;
+		return !RegExp.ID.test(value);
 	}, [])
 
 	const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
-    setEmailError(validateEmail(e.target.value));
+    setEmailErrorText(validateEmail(e.target.value) ? "아이디는 이메일 형식입니다." : "");
+    if (!isTouched) setIsTouched(true);
   };
 
   return (
-    <LoginInput
+    <Input
       type="text"
       placeholder="아이디"
       value={email}
       onChange={handleEmailChange}
-      errorMessage={emailError ? "아이디는 이메일 형식입니다." : undefined}
+      errorMessage={emailErrorText}
+      isTouched={isTouched}
     />
+    
   );
 })
 

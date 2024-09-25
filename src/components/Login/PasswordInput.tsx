@@ -1,36 +1,38 @@
 import React, { useCallback, useState } from "react";
-import LoginInput from "./LoginInput";
+import Input from "../Common/Input";
+import RegExp from "../../constants/Reg";
 
 interface PasswordInputProps {
 	password: string;
 	setPassword: (password: string) => void;
 }
 
-const passwordReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
-
 const PasswordInput = React.memo(({ password, setPassword }: PasswordInputProps): JSX.Element => {
 	const [showPassword, setShowPassword] = useState<boolean>(false);
-	const [passwordError, setPasswordError] = useState<boolean>(false);
+	const [passwordErrorText, setShowPasswordText] = useState<string>("");
+  const [isTouched, setIsTouched] = useState<boolean>(false);
 	
 	const validatePassword = useCallback((value: string): boolean => {
 		if (value === "") return false;
-		return !passwordReg.test(value);
+		return !RegExp.PASSWORD.test(value);
 	}, []);
 
 	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
-    setPasswordError(validatePassword(e.target.value));
+    setShowPasswordText(validatePassword(e.target.value) ? "영어, 숫자, 특수 문자를 포함한 8글자 이상을 입력하세요." : "");
+    if (!isTouched) setIsTouched(true);
   };
 
   return (
-    <LoginInput
+    <Input
       type={showPassword ? "text" : "password"}
       placeholder="비밀번호"
       value={password}
       onChange={handlePasswordChange}
-      errorMessage={passwordError ? "영어, 숫자, 특수 문자를 포함한 8글자 이상을 입력하세요." : undefined}
+      errorMessage={passwordErrorText}
       showToggle={true}
       toggleShow={() => setShowPassword(!showPassword)}
+      isTouched={isTouched}
     />
   );
 })

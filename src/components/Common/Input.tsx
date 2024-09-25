@@ -1,30 +1,34 @@
 import styled from "@emotion/styled";
 import { LuEye, LuEyeOff } from "react-icons/lu";
-import ErrorMessage from "../ErrorMessage";
+import ErrorMessage from "./ErrorMessage";
+import Color from "../../constants/Color";
 
 interface InputProps {
   type: string;
   placeholder: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  errorMessage?: string;
+  errorMessage: string;
+  isTouched: boolean;
   showToggle?: boolean;
   toggleShow?: () => void;
 }
 
-const LoginInput = ({
+const Input = ({
   type,
   placeholder,
   value,
   onChange,
   errorMessage,
+  isTouched,
   showToggle,
-  toggleShow
+  toggleShow,
 }: InputProps): JSX.Element => {
+  
   return (
 		<>
 		<InputDiv>
-      <Input type={type} placeholder={placeholder} value={value} onChange={onChange} />
+      <StyledInput type={type} placeholder={placeholder} value={value} onChange={onChange} errorMessage={errorMessage || ""} isTouched={isTouched}/>
       {showToggle && (
         <ShowBox onClick={toggleShow}>
           {type === "password" ? <LuEyeOff size="20" /> : <LuEye size="20" />}
@@ -36,20 +40,19 @@ const LoginInput = ({
   );
 };
 
-export default LoginInput;
+export default Input;
 
 const InputDiv = styled.div`
-
 	position: relative;
 `
 
-const Input = styled.input`
+const StyledInput = styled.input<{errorMessage : string, isTouched: boolean}>`
 	width: 256px;
 	height: 35px;
 	padding-left: 10px;
 
 	font-size: 16px;
-	border: 1px solid #000;
+	border: 1px solid ${( props ) => props.isTouched ? props.errorMessage ? `${Color.black}`: `${Color.Main}` : `${Color.black}`};
   border-radius: 5px;
 `
 
