@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { LuEye, LuEyeOff } from "react-icons/lu";
+import ErrorMessage from "../ErrorMessage";
 
 interface InputProps {
   type: string;
@@ -11,7 +12,7 @@ interface InputProps {
   toggleShow?: () => void;
 }
 
-const InputField = ({
+const LoginInput = ({
   type,
   placeholder,
   value,
@@ -30,54 +31,34 @@ const InputField = ({
         </ShowBox>
       )}
     </InputDiv>
-		<ErrorDiv>
-			{errorMessage && <ErrorText>{errorMessage}</ErrorText>}
-		</ErrorDiv>
+		<ErrorMessage errorMessage={errorMessage}/>
 		</>
   );
 };
 
-export default InputField;
+export default LoginInput;
 
 const InputDiv = styled.div`
-	width: 256px;
-	height: 30px;
 
-	display: flex;
-	flex-direction: column;
 	position: relative;
 `
 
 const Input = styled.input`
 	width: 256px;
-	height: 30px;
+	height: 35px;
 	padding-left: 10px;
 
 	font-size: 16px;
-	border: none;
-	border-bottom: 1px solid #000;
-`
-const ErrorDiv = styled.div`
-	width: 256px;
-	margin-top: 10px;
-	display: flex;
-	flex-direction: column;
-	position: relative;
+	border: 1px solid #000;
+  border-radius: 5px;
 `
 
-const ErrorText = styled.p`
-  font-size: 12px;
-  color: red;
-	white-space: pre-wrap;
-	padding-left: 10px;
-	margin-top: 0px;
-`
 const ShowBox = styled.div`
 	width: 20px;
 	height: 20px;
 
 	position: absolute;
-	right: 0px;
+	right: 10px;
 	top: 50%;
 
 	transform: translateY(-50%);

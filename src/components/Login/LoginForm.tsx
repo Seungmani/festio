@@ -25,11 +25,9 @@ const LoginForm = React.memo((): JSX.Element => {
 
 	return (
 		<Form onSubmit={handleSubmit}>
-			<div>
-				<EmailInput email={email} setEmail={handleEmailChange} />
-				<PasswordInput password={password} setPassword={handlePasswordChange} />
-			</div>
-			<Button text={"로그인"}/>
+			<EmailInput email={email} setEmail={handleEmailChange} />
+			<PasswordInput password={password} setPassword={handlePasswordChange} />
+			<Button text="로그인" width="232px" height="44px"/>
 		</Form>
 	)
 })
@@ -39,6 +37,7 @@ export default LoginForm;
 const Form = styled.form`
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	align-items: center;
+
+	margin-top: 20px;
 `

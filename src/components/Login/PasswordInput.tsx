@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import InputField from "./InputField";
+import LoginInput from "./LoginInput";
 
 interface PasswordInputProps {
 	password: string;
@@ -13,7 +13,6 @@ const PasswordInput = React.memo(({ password, setPassword }: PasswordInputProps)
 	const [passwordError, setPasswordError] = useState<boolean>(false);
 	
 	const validatePassword = useCallback((value: string): boolean => {
-		console.log("validatePassword")
 		if (value === "") return false;
 		return !passwordReg.test(value);
 	}, []);
@@ -24,7 +23,7 @@ const PasswordInput = React.memo(({ password, setPassword }: PasswordInputProps)
   };
 
   return (
-    <InputField
+    <LoginInput
       type={showPassword ? "text" : "password"}
       placeholder="비밀번호"
       value={password}

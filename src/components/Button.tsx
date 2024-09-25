@@ -2,23 +2,25 @@ import styled from "@emotion/styled";
 import Color from "../constants/Color";
 
 interface ButtonProps {
-	text: string
+	text: string;
+	width: string;
+	height: string;
 }
 
-const Button = ({text}: ButtonProps): JSX.Element => {
+const Button = ({text, width, height}: ButtonProps): JSX.Element => {
 	return (
-		<StyledButton type="submit">{text}</StyledButton>
+		<StyledButton width={width} height={height} type="submit">{text}</StyledButton>
 	)
 }
 
 export default Button;
 
-const StyledButton = styled.button`
-	width: 232px;
-	height: 44px;
-	line-height: 44px;
+const StyledButton = styled.button<{ width: string; height: string }>`
+	width: ${(props) => props.width};
+	height: ${(props) => props.height};
+	line-height: ${(props) => props.height};
 
-	margin: 10px 10px 0px 10px;
+	margin: 20px 10px 0px 10px;
 
 	border-radius: 30px;
 	border: none;

@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import InputField from "./InputField";
+import LoginInput from "./LoginInput";
 
 interface EmailInputProps {
 	email: string;
@@ -12,7 +12,6 @@ const EmailInput = React.memo(({ email, setEmail }: EmailInputProps): JSX.Elemen
 	const [emailError, setEmailError] = useState<boolean>(false);
 	
 	const validateEmail = useCallback((value: string): boolean => {
-		console.log("validateEmail")
 		if (value === "") return false;
 		return !emailReg.test(value);
 	}, [])
@@ -23,7 +22,7 @@ const EmailInput = React.memo(({ email, setEmail }: EmailInputProps): JSX.Elemen
   };
 
   return (
-    <InputField
+    <LoginInput
       type="text"
       placeholder="아이디"
       value={email}

@@ -4,58 +4,38 @@ import { Link } from 'react-router-dom';
 
 import LoginForm from '../components/Login/LoginForm';
 import SnsLoginDiv from '../components/Login/SnsLoginDiv';
+import GreyContainer from '../components/GreyContainer';
 
 
 const Login = () :JSX.Element => {
 
 	return (
-		<FullDiv>
-			<Container>
+		<GreyContainer width="450px" height='450px'>
+			<DIV>
 				<Logo>Festio</Logo>
 				<LoginForm />
 				<FlexRow>
 					<StyledLink to="#"><P>비밀번호 찾기</P></StyledLink>
 					<P> / </P>
-        	<StyledLink to="/register"><P>회원가입</P></StyledLink>
+					<StyledLink to="/register"><P>회원가입</P></StyledLink>
 				</FlexRow>
 				<SnsLoginDiv />
-			</Container>
-		</FullDiv>
+			</DIV>
+		</GreyContainer>
 	)
 }
 
 export default Login;
 
-const FullDiv = styled.div`
-  width: 100%;
-	height: 100%;
-	background-color: ${Color.background};
-
-	overflow: hidden;
-`
-
-const Container = styled.div`
-	width: 450px;
-	height: 450px;
-
-	display: flex;
-	flex-direction: column;
-	justify-content: start;
-	align-items: center;
-
-	position: relative;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	
-	background-color: ${Color.white};
-	border-radius: 15px;
-`
 const Logo = styled.h1`
   margin-top: 30px;
 	font-size: 32px;
   color: ${Color.Main};
 	text-align: center;
+`
+const DIV = styled.div`
+	width: 300px;
+	margin: 0 auto;
 `
 
 const FlexRow = styled.div`
