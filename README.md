@@ -5,6 +5,7 @@
 ```text
 /src
 -/components
+-- common
 -- Header
 -- Login
 -- Register
@@ -34,8 +35,9 @@
 
 ## commit prefix
 1-1. 코드 관련
-```
+```bash
 feat: 기능 개발 및 기능 수정
+layout: html, css 관련 커밋
 fix: 기존에 작성된 코드 오류 개선 혹은 버그 패치
 refactor: 기존 코드 구조 개선
 etc: 주석 추가, 코드 살짝 변경 등 영향을 미치지 않는 수정
