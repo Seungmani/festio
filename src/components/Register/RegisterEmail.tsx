@@ -1,6 +1,7 @@
 import React from "react";
 import EmailInput from "../Login/EmailInput";
 import styled from "@emotion/styled";
+import EmailDuplicationBtn from "./EmailDuplicationBtn";
 
 interface EmailInputProps {
 	email: string;
@@ -12,7 +13,7 @@ const RegisterEmail = React.memo(({ email, setEmail }: EmailInputProps): JSX.Ele
 		<>
 			<FlexRow>
 				<H2>아이디</H2>
-				<button>중복 검사</button>
+				<EmailDuplicationBtn email={email} />
 			</FlexRow>
     	<EmailInput email={email} setEmail={setEmail}/>
 		</>

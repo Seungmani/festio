@@ -11,8 +11,8 @@ const UserProper = React.lazy(() => import('../pages/UserProper'));
 
 const Router = (): JSX.Element => {
 	return (
-		<Routes>
-			<Suspense fallback={"Loading..."}>
+		<Suspense fallback={"Loading..."}>
+			<Routes>
 				<Route path="*" element={<Error />} />
 				<Route path="/" element={<Main />} />
 				<Route path="/login" element={<Login />} />
@@ -20,8 +20,8 @@ const Router = (): JSX.Element => {
 				<Route path="/concert-info" element={<ConcertInfo />} />
 				<Route path="/my-page" element={<Mypage />} />
 				<Route path="/user-proper" element={<UserProper />} />
-			</Suspense>
-		</Routes>
+			</Routes>
+		</Suspense>
 	)
 }
 
