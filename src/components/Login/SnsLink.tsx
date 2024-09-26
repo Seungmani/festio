@@ -4,11 +4,12 @@ interface SnsLinkProps {
 	src: string;
   text: string;
 	color: string;
+	onClick: () => Promise<void>;
 }
 
-const SnsLink = ({src, text, color}: SnsLinkProps): JSX.Element => {
+const SnsLink = ({src, text, color, onClick}: SnsLinkProps): JSX.Element => {
 	return (
-		<LinkDiv>
+		<LinkDiv onClick={text === "구글" ? onClick : () => {}}>
 			<ImgDiv color={color}>
 				<SnsImage src={src} alt={text} />
 			</ImgDiv>
@@ -22,6 +23,7 @@ export default SnsLink;
 const LinkDiv = styled.div`
 	display: flex;
 	flex-direction: column;
+	cursor: pointer;
 `
 
 const ImgDiv = styled.div<{ color: string }>`
