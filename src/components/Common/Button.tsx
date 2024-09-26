@@ -5,17 +5,18 @@ interface ButtonProps {
 	text: string;
 	width: string;
 	height: string;
+	disabled: boolean;
 }
 
-const Button = ({text, width, height}: ButtonProps): JSX.Element => {
+const Button = ({text, width, height, disabled}: ButtonProps): JSX.Element => {
 	return (
-		<StyledButton width={width} height={height} type="submit">{text}</StyledButton>
+		<StyledButton disabled={disabled} width={width} height={height} type="submit">{text}</StyledButton>
 	)
 }
 
 export default Button;
 
-const StyledButton = styled.button<{ width: string; height: string }>`
+const StyledButton = styled.button<{ width: string; height: string; disabled: boolean}>`
 	width: ${(props) => props.width};
 	height: ${(props) => props.height};
 	line-height: ${(props) => props.height};
@@ -28,7 +29,7 @@ const StyledButton = styled.button<{ width: string; height: string }>`
 	font-size: 24px;
 	text-align: center;
 	color: ${Color.WHITE};
-	background-color: ${Color.MAIN};
+	background-color: ${(props) => props.disabled ? Color.GREY : Color.MAIN};
 
 	:hover {
 		color: ${Color.BLACK};
