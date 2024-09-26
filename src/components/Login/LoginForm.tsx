@@ -15,11 +15,11 @@ const LoginForm = React.memo((): JSX.Element => {
   }
 
 	const handleEmailChange = useCallback((e: string) => {
-    setEmail(e);
+    setEmail((prevEmail) => (prevEmail === e ? prevEmail : e));
   }, []);
 
   const handlePasswordChange = useCallback((e: string) => {
-    setPassword(e);
+    setPassword((prevPassword) => (prevPassword === e ? prevPassword : e));
   }, []);
 
 	return (
