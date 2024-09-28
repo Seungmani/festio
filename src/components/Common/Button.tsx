@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import Color from "../../constants/Color";
+import React from "react";
 
 interface ButtonProps {
 	text: string;
@@ -8,11 +9,11 @@ interface ButtonProps {
 	disabled: boolean;
 }
 
-const Button = ({text, width, height, disabled}: ButtonProps): JSX.Element => {
+const Button = React.memo(({text, width, height, disabled}: ButtonProps): JSX.Element => {
 	return (
 		<StyledButton disabled={disabled} width={width} height={height} type="submit">{text}</StyledButton>
 	)
-}
+})
 
 export default Button;
 
