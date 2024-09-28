@@ -1,14 +1,18 @@
-import EmailInput from "./EmailInput";
-import PasswordInput from "./PasswordInput";
-import Button from "../Common/Button";
 import React, { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { setUser } from "../../redux/userSlice";
 import { useDispatch } from "react-redux";
 import styled from '@emotion/styled';
-import { setUser } from "../../redux/userSlice";
+
+import TextInput from "../Common/TextInput";
+import PasswordInput from "../Common/PasswordInput";
+import Button from "../Common/Button";
+import { validateEmail, validatePassword } from "../../utils/validation";
+import ErrorText from "../../constants/ErrorTest";
+
 import { auth, db } from "../../firebase";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
 
 const LoginForm = React.memo((): JSX.Element => {
 	const [email, setEmail] = useState<string>("");
@@ -16,6 +20,9 @@ const LoginForm = React.memo((): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	
+	const emailErrorMessage = ErrorText.EMAIL_FORM_ERROR;
+	const passwordErrorMessage = ErrorText.PASSWORD_FORM_ERROR;
+
 	const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
 		console.log("Email:", email);
@@ -52,8 +59,20 @@ const LoginForm = React.memo((): JSX.Element => {
 
 	return (
 		<Form onSubmit={handleSubmit}>
-			<EmailInput email={email} setEmail={handleEmailChange} />
-			<PasswordInput password={password} setPassword={handlePasswordChange} />
+			<TextInput 
+				text={email}
+				setText={handleEmailChange}
+				validate={validateEmail}
+				errorMessage={emailErrorMessage} 
+				placeholder="아이디"  
+			/>
+			<PasswordInput 
+				password={password} 
+				setPassword={handlePasswordChange}
+				validate={validatePassword}
+				errorMessage={passwordErrorMessage} 
+				placeholder="비밀 번호"  
+			/>
 			<Button text="로그인" width="232px" height="44px" disabled={false}/>
 		</Form>
 	)
