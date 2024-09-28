@@ -7,19 +7,18 @@ import styled from '@emotion/styled'
 interface TextInputProps {
   text: string;
   setText: (text: string) => void
-  validate: (value: string) => boolean;
-  errorMessage: string;
+  validate: (value: string) => [string, boolean];
   placeholder: string;
 }
 
-const TextInput = React.memo(({ text, setText, validate, errorMessage, placeholder }: TextInputProps): JSX.Element => {
+const TextInput = React.memo(({ text, setText, validate, placeholder }: TextInputProps): JSX.Element => {
   const [errorText, setErrorText] = useState<string>('')
   const [isTouched, setIsTouched] = useState<boolean>(false)
   const color = useColor(isTouched, errorText)
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value)
-    setErrorText(validate(e.target.value) ? "" : errorMessage);
+    setErrorText(validate(e.target.value)[0]);
     if (!isTouched) setIsTouched(true)
   }
 

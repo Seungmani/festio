@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../../redux/userSlice";
 import { useDispatch } from "react-redux";
@@ -8,7 +8,7 @@ import TextInput from "../Common/TextInput";
 import PasswordInput from "../Common/PasswordInput";
 import Button from "../Common/Button";
 import { validateEmail, validatePassword } from "../../utils/validation";
-import ErrorText from "../../constants/ErrorTest";
+import useHandleInputChange from "../../hooks/useHandleInputChange";
 
 import { auth, db } from "../../firebase";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
@@ -20,9 +20,6 @@ const LoginForm = React.memo((): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	
-	const emailErrorMessage = ErrorText.EMAIL_FORM_ERROR;
-	const passwordErrorMessage = ErrorText.PASSWORD_FORM_ERROR;
-
 	const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
 		console.log("Email:", email);
@@ -49,28 +46,18 @@ const LoginForm = React.memo((): JSX.Element => {
     }
   }
 
-	const handleEmailChange = useCallback((e: string) => {
-    setEmail((prevEmail) => (prevEmail === e ? prevEmail : e));
-  }, []);
-
-  const handlePasswordChange = useCallback((e: string) => {
-    setPassword((prevPassword) => (prevPassword === e ? prevPassword : e));
-  }, []);
-
 	return (
 		<Form onSubmit={handleSubmit}>
 			<TextInput 
 				text={email}
-				setText={handleEmailChange}
+				setText={useHandleInputChange(setEmail)}
 				validate={validateEmail}
-				errorMessage={emailErrorMessage} 
 				placeholder="아이디"  
 			/>
 			<PasswordInput 
 				password={password} 
-				setPassword={handlePasswordChange}
+				setPassword={useHandleInputChange(setPassword)}
 				validate={validatePassword}
-				errorMessage={passwordErrorMessage} 
 				placeholder="비밀 번호"  
 			/>
 			<Button text="로그인" width="232px" height="44px" disabled={false}/>
