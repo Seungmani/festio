@@ -11,13 +11,13 @@ export const validatePassword = (value: string): [string, boolean] => {
 	return ["", true];
 }
 
-export const validateConfirmPassword = (password: string, confirmPassword: string | undefined): [string, boolean] => {
+export const validatePasswordCheck = (password: string, confirmPassword: string | undefined): [string, boolean] => {
 	if (password !== confirmPassword) return [ErrorText.CHECK_PASSWORD_ERROR, false];
   return ["", true];
 }
 
 export const validateName = (value: string): [string, boolean] => {
-	if (value !== "") return ["", true];
+	if (value.length) return ["", true];
 	else return [ErrorText.NAME_NOT_INPUT, false];
 };
 

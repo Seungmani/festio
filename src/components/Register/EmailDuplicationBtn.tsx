@@ -4,7 +4,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 
 interface EmailDuplicationBtnProps {
 	email: string;
-	setDuplicate: (boolean) => void;
+	setDuplicate: (value: boolean) => void;
 }
 
 const EmailDuplicationBtn = React.memo(({email, setDuplicate}: EmailDuplicationBtnProps): JSX.Element => {

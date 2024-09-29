@@ -6,6 +6,7 @@ interface InputProps {
   placeholder: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  name: string;
   color: string;
 }
 
@@ -14,6 +15,7 @@ const Input = React.memo(({
   placeholder,
   value,
   onChange,
+  name,
   color
 }: InputProps): JSX.Element => {
 
@@ -23,6 +25,7 @@ const Input = React.memo(({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        name={name}
         color={color}
       />
   );

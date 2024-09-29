@@ -1,72 +1,90 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 
-import Button from "../Common/Button";
-import PasswordInput from "../Common/PasswordInput";
 import TextInput from "../Common/TextInput";
+import PasswordInput from "../Common/PasswordInput";
+import Button from "../Common/Button";
 import EmailDuplicationBtn from "./EmailDuplicationBtn";
 import { 
 	validateEmail, 
 	validatePassword, 
-	validateConfirmPassword, 
+	validatePasswordCheck, 
 	validateName,
 	validatePhoneNumber
 } from "../../utils/validation";
-import ErrorText from "../../constants/ErrorText";
-import useHandleInputChange from "../../hooks/useHandleInputChange";
 
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { doc, setDoc } from "firebase/firestore";
 
 const RegisterForm = React.memo((): JSX.Element => {
-	const [email, setEmail] = useState<string>("");
+	const [formState, setFormState] = useState({
+		email: { value: '', errorText: '', isValid: false },
+		password: { value: '', errorText: '', isValid: false },
+		passwordCheck: { value: '', errorText: '', isValid: false },
+		name: { value: '', errorText: '', isValid: false },
+		phone: { value: '', errorText: '', isValid: false },
+	});
 	const [isEmailDuplicate, setIsEmailDuplicate] = useState<boolean>(false);
-	const [password, setPassword] = useState<string>("");
-	const [passwordConfirm, setPasswordConfirm] = useState<string>("");
-	const [name, setName] = useState<string>("");
-	const [phone, setPhone] = useState<string>("");
-	const [isDisabled, setIsDisabled] = useState<boolean>(true);
+
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		setIsDisabled(
-			!validateEmail(email)[1] || 
-			!isEmailDuplicate ||
-			!validatePassword(password)[1] || 
-			!validateConfirmPassword(passwordConfirm, password)[1] ||
-			!validateName(name)[1] ||
-			!validatePhoneNumber(phone)[1]
-		);
-	}, [email, password, passwordConfirm, name, phone, isEmailDuplicate]);
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+		const {name, value} = e.target;
+		let [errorText, error]: [string, boolean] = ["", false];
+		switch(name) {
+			case "email": [errorText, error] = validateEmail(value)
+				break;
+			case "password": [errorText, error] = validatePassword(value);
+				break;
+			case "passwordCheck": [errorText, error] = validatePasswordCheck(formState.password.value, value);
+			  break;
+			case "name": [errorText, error] = validateName(value);
+			  break;
+			case "phone": [errorText, error] = validatePhoneNumber(value);
+				break;
+		}
+		setFormState((prev) => ({
+			...prev,
+			[name]: {
+				value,
+				errorText,
+				isValid: error,
+			},
+		}));
+	};
 
-  const validatePasswordConfirm = useCallback((value: string): [string, boolean] => {
-    if (password !== value) return [ErrorText.CHECK_PASSWORD_ERROR, false];
-    return ["", true];
-  }, [password]);
+	const disabled = formState.email.isValid &&
+		isEmailDuplicate &&
+		formState.password.isValid &&
+    formState.passwordCheck.isValid &&
+    formState.name.isValid &&
+    formState.phone.isValid;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+				auth, formState.email.value, formState.password.value
+			);
       const user = userCredential.user;
 
       await setDoc(doc(db, "users", user.uid), {
-        email: email,
-        phone: phone,
-        name: name,
+        email: formState.email.value,
+        phone: formState.password.value,
+        name: formState.name.value,
         createdAt: new Date(),
       });
 
       dispatch(setUser({
         uid: user.uid,
         email: user.email,
-        phone: phone,
+        phone: formState.phone.value,
       }));
 
       alert("회원가입이 완료되었습니다!");
@@ -79,55 +97,50 @@ const RegisterForm = React.memo((): JSX.Element => {
 
   return (
 		<Form onSubmit={handleSubmit}>
-			<>
-				<FlexRow>
-					<H2>아이디</H2>
-					<EmailDuplicationBtn email={email} setDuplicate={setIsEmailDuplicate} />
-				</FlexRow>
-				<TextInput 
-					text={email}
-					setText={useHandleInputChange(setEmail)}
-					validate={validateEmail}
-					placeholder="아이디"  
-				/>
-			</>
-			<>
-      	<H2>비밀번호</H2>
-				<PasswordInput 
-					password={password} 
-					setPassword={useHandleInputChange(setPassword)}
-					validate={validatePassword}
-					placeholder="비밀번호"  
-				/>
-			</>
-			<>
-      	<H2>비밀번호 확인</H2>
-				<PasswordInput 
-					password={passwordConfirm} 
-					setPassword={useHandleInputChange(setPasswordConfirm)}
-					validate={validatePasswordConfirm}
-					placeholder="비밀번호 확인"  
-				/>
-			</>
-			<>
-      	<H2>이름</H2>
-				<TextInput 
-					text={name}
-					setText={useHandleInputChange(setName)}
-					validate={validateName}
-					placeholder="이름" 
-				/>
-			</>
-			<>
-      	<H2>번호</H2>
-				<TextInput 
-					text={phone}
-					setText={useHandleInputChange(setPhone)}
-					validate={validatePhoneNumber}
-					placeholder="번호" 
-				/>
-			</>
-			<Button width="232px" height="44px" text={"회원 가입"} disabled={isDisabled}/>
+			<FlexRow>
+				<H2>아이디</H2>
+				<EmailDuplicationBtn email={formState.email.value} setDuplicate={setIsEmailDuplicate} />
+			</FlexRow>
+			<TextInput 
+				text={formState.email.value}
+				name="email"
+				setText={handleInputChange}
+				errorText={formState.email.errorText}
+				placeholder="아이디"  
+			/>
+			<H2>비밀번호</H2>
+			<PasswordInput 
+				password={formState.password.value} 
+				name="password"
+				setPassword={handleInputChange}
+				errorText={formState.password.errorText}
+				placeholder="비밀번호"  
+			/>
+			<H2>비밀번호 확인</H2>
+			<PasswordInput 
+				password={formState.passwordCheck.value} 
+				name="passwordCheck"
+				setPassword={handleInputChange}
+				errorText={formState.passwordCheck.errorText}
+				placeholder="비밀번호 확인"  
+			/>
+			<H2>이름</H2>
+			<TextInput 
+				text={formState.name.value}
+				name="name"
+				setText={handleInputChange}
+				errorText={formState.name.errorText}
+				placeholder="이름" 
+			/>
+			<H2>번호</H2>
+			<TextInput 
+				text={formState.phone.value}
+				name="phone"
+				setText={handleInputChange}
+				errorText={formState.phone.errorText}
+				placeholder="번호" 
+			/>
+			<Button width="232px" height="44px" text={"회원 가입"} disabled={!disabled}/>
 		</Form>
   );
 });

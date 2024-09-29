@@ -6,21 +6,20 @@ import Toggle from "./Toggle";
 import useColor from "../../hooks/useColor";
 
 interface PasswordInputProps {
-	password: string;
-	setPassword: (password: string) => void;
-  validate: (value: string) => [string, boolean];
+  password: string;
+  setPassword: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  name: string;
+  errorText: string;
   placeholder: string;
 }
 
-const PasswordInput = React.memo(({ password, setPassword, validate, placeholder }: PasswordInputProps): JSX.Element => {
+const PasswordInput = React.memo(({ password, setPassword, name, placeholder, errorText }: PasswordInputProps): JSX.Element => {
 	const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [errorText, setErrorText] = useState<string>('');
   const [isTouched, setIsTouched] = useState<boolean>(false);
   const color = useColor(isTouched, errorText);
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-    setErrorText(validate(e.target.value)[0]);
+    setPassword(e);
     if (!isTouched) setIsTouched(true);
   };
 
@@ -32,6 +31,7 @@ const PasswordInput = React.memo(({ password, setPassword, validate, placeholder
           placeholder={placeholder}
           value={password}
           onChange={handlePasswordChange}
+          name={name}
           color={color}
         />
         <Toggle setShowPassword={showPassword} setShowToggle={() => setShowPassword(!showPassword)}/>
