@@ -1,6 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import React from 'react';
 import { Suspense } from 'react';
+import useAuthListener from "../hooks/useAuthListener";
+
 const Error = React.lazy(() => import('../pages/Error'));
 const Login = React.lazy(() => import('../pages/Login'));
 const Register = React.lazy(() => import('../pages/Register'));
@@ -10,6 +12,7 @@ const Mypage = React.lazy(() => import('../pages/Mypage'));
 const UserProper = React.lazy(() => import('../pages/UserProper'));
 
 const Router = (): JSX.Element => {
+	useAuthListener()
 	return (
 		<Suspense fallback={"Loading..."}>
 			<Routes>

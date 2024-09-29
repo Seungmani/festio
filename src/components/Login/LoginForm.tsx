@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../../redux/userSlice";
 import { useDispatch } from "react-redux";
@@ -10,7 +10,7 @@ import Button from "../Common/Button";
 import useFormState from "../../hooks/useFormState";
 
 import { auth, db } from "../../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, setPersistence, browserSessionPersistence} from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
 const initialLoginState = {
@@ -27,7 +27,9 @@ const LoginForm = React.memo((): JSX.Element => {
     e.preventDefault();
 
 		try {
-      const userCredential = await signInWithEmailAndPassword(auth,formState.email.value, formState.password.value);
+			await setPersistence(auth, browserSessionPersistence);
+
+      const userCredential = await signInWithEmailAndPassword(auth, formState.email.value, formState.password.value);
       const user = userCredential.user;
 			const userDoc = await getDoc(doc(db, "users", user.uid));
 
@@ -36,6 +38,7 @@ const LoginForm = React.memo((): JSX.Element => {
         email: user.email,
         phone: userDoc.data().phone,
       }));
+			
       alert("로그인 성공!");
 			navigate('/', { replace: true });
     } catch (error) {
