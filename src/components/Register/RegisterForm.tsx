@@ -76,7 +76,7 @@ const RegisterForm = React.memo((): JSX.Element => {
 
       await setDoc(doc(db, "users", user.uid), {
         email: formState.email.value,
-        phone: formState.password.value,
+        phone: formState.phone.value,
         name: formState.name.value,
         createdAt: new Date(),
       });
@@ -144,7 +144,6 @@ const RegisterForm = React.memo((): JSX.Element => {
 		</Form>
   );
 });
-
 
 export default RegisterForm;
 

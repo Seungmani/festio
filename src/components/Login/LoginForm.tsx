@@ -42,11 +42,9 @@ const LoginForm = React.memo((): JSX.Element => {
 
 	const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
-		console.log("Email:", email);
-		console.log("Password:", password);
 
 		try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth,formState.email.value, formState.password.value);
       const user = userCredential.user;
 			onAuthStateChanged(auth, (user) => {
 				console.log("User3:", user)
