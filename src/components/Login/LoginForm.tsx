@@ -7,48 +7,28 @@ import styled from '@emotion/styled';
 import TextInput from "../Common/TextInput";
 import PasswordInput from "../Common/PasswordInput";
 import Button from "../Common/Button";
-import { validateEmail, validatePassword } from "../../utils/validation";
+import useFormState from "../../hooks/useFormState";
 
 import { auth, db } from "../../firebase";
-import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
+const initialLoginState = {
+  email: { value: '', errorText: '', isValid: false },
+  password: { value: '', errorText: '', isValid: false },
+};
+
 const LoginForm = React.memo((): JSX.Element => {
-	const [formState, setFormState] = useState({
-		email: { value: '', errorText: '', isValid: false },
-		password: { value: '', errorText: '', isValid: false },
-	});
+	const { formState, handleInputChange } = useFormState(initialLoginState);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-		const {name, value} = e.target;
-		let [errorText, error]: [string, boolean] = ["", false];
-		switch(name) {
-			case "email": [errorText, error] = validateEmail(value)
-				break;
-			case "password": [errorText, error] = validatePassword(value);
-				break;
-		}
-		setFormState((prev) => ({
-			...prev,
-			[name]: {
-				value,
-				errorText,
-				isValid: error,
-			},
-		}));
-	};
-
 	const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
 
 		try {
       const userCredential = await signInWithEmailAndPassword(auth,formState.email.value, formState.password.value);
       const user = userCredential.user;
-			onAuthStateChanged(auth, (user) => {
-				console.log("User3:", user)
-			})
 			const userDoc = await getDoc(doc(db, "users", user.uid));
 
       dispatch(setUser({
@@ -56,7 +36,6 @@ const LoginForm = React.memo((): JSX.Element => {
         email: user.email,
         phone: userDoc.data().phone,
       }));
-
       alert("로그인 성공!");
 			navigate('/', { replace: true });
     } catch (error) {

@@ -8,55 +8,26 @@ import TextInput from "../Common/TextInput";
 import PasswordInput from "../Common/PasswordInput";
 import Button from "../Common/Button";
 import EmailDuplicationBtn from "./EmailDuplicationBtn";
-import { 
-	validateEmail, 
-	validatePassword, 
-	validatePasswordCheck, 
-	validateName,
-	validatePhoneNumber
-} from "../../utils/validation";
+import useFormState from "../../hooks/useFormState";
+
 
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { doc, setDoc } from "firebase/firestore";
 
-const RegisterForm = React.memo((): JSX.Element => {
-	const [formState, setFormState] = useState({
-		email: { value: '', errorText: '', isValid: false },
-		password: { value: '', errorText: '', isValid: false },
-		passwordCheck: { value: '', errorText: '', isValid: false },
-		name: { value: '', errorText: '', isValid: false },
-		phone: { value: '', errorText: '', isValid: false },
-	});
-	const [isEmailDuplicate, setIsEmailDuplicate] = useState<boolean>(false);
+const initialRegisterState = {
+  email: { value: '', errorText: '', isValid: false },
+  password: { value: '', errorText: '', isValid: false },
+  passwordCheck: { value: '', errorText: '', isValid: false },
+  name: { value: '', errorText: '', isValid: false },
+  phone: { value: '', errorText: '', isValid: false },
+};
 
+const RegisterForm = React.memo((): JSX.Element => {
+	const { formState, handleInputChange } = useFormState(initialRegisterState);
+	const [isEmailDuplicate, setIsEmailDuplicate] = useState<boolean>(false);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-		const {name, value} = e.target;
-		let [errorText, error]: [string, boolean] = ["", false];
-		switch(name) {
-			case "email": [errorText, error] = validateEmail(value)
-				break;
-			case "password": [errorText, error] = validatePassword(value);
-				break;
-			case "passwordCheck": [errorText, error] = validatePasswordCheck(formState.password.value, value);
-			  break;
-			case "name": [errorText, error] = validateName(value);
-			  break;
-			case "phone": [errorText, error] = validatePhoneNumber(value);
-				break;
-		}
-		setFormState((prev) => ({
-			...prev,
-			[name]: {
-				value,
-				errorText,
-				isValid: error,
-			},
-		}));
-	};
 
 	const disabled = formState.email.isValid &&
 		isEmailDuplicate &&
