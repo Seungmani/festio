@@ -9,7 +9,7 @@ interface ColorType {
 }
 
 const Color: Readonly<ColorType> = Object.freeze({
-	MAIN: "#77DD77",
+	MAIN: "#B1B1FF",
 	GREY: "#D9D9D9",
 	WHITE: "#ffffff",
 	BLACK: "#000000",

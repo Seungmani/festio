@@ -8,3 +8,9 @@ html, body {
 #root {
   height: 100%;
 }
+
+*, *::before, *::after {
+  box-sizing: border-box; /* 모든 요소에 box-sizing 적용 */
+  margin: 0;
+  padding: 0;
+}
