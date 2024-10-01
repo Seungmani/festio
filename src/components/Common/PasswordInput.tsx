@@ -34,7 +34,9 @@ const PasswordInput = React.memo(({ password, setPassword, name, placeholder, er
           name={name}
           color={color}
         />
-        <Toggle setShowPassword={showPassword} setShowToggle={() => setShowPassword(!showPassword)}/>
+        <ShowBox onClick={() => setShowPassword(!showPassword)}>
+          <Toggle show={showPassword} type="password" />
+        </ShowBox>
       </InputDiv>
       <Error errorMessage={errorText}/>
     </>
@@ -46,3 +48,13 @@ export default PasswordInput;
 const InputDiv = styled.div`
   position: relative;
 `;
+
+const ShowBox = styled.div`
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+`
