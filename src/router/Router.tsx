@@ -7,7 +7,7 @@ const Error = React.lazy(() => import('../pages/Error'));
 const Login = React.lazy(() => import('../pages/Login'));
 const Register = React.lazy(() => import('../pages/Register'));
 const Main = React.lazy(() => import('../pages/Main'));
-const ConcertInfo = React.lazy(() => import('../pages/ConcertInfo'));
+const DetailPage = React.lazy(() => import('../pages/DetailPage'));
 const Mypage = React.lazy(() => import('../pages/Mypage'));
 const UserProper = React.lazy(() => import('../pages/UserProper'));
 
@@ -20,7 +20,7 @@ const Router = (): JSX.Element => {
 				<Route path="/" element={<Main />} />
 				<Route path="/login" element={<Login />} />
 				<Route path="/register" element={<Register />} />
-				<Route path="/concert-info" element={<ConcertInfo />} />
+				<Route path="/DetailPage/:localId" element={<DetailPage />} />
 				<Route path="/my-page" element={<Mypage />} />
 				<Route path="/user-proper" element={<UserProper />} />
 			</Routes>

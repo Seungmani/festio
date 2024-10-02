@@ -1,18 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from '@emotion/styled';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from "../redux/store";
 
 import Pagination from "../components/Main/Pagination";
 import Header from "../components/Header/Header";
 import Search from "../components/Main/Search";
 import Poster from "../components/Main/Poster";
+import { fetchApiData } from "../redux/apiDataActions";
 
 const Main = () :JSX.Element => {
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [searchResult, setSearchResult] = useState<string>("");
 	const user = useSelector((state: RootState) => state.user);
+	const { data, loading} = useSelector((state: RootState) => state.apiData);
+	const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(fetchApiData()); // 컴포넌트 마운트 시 데이터 가져오기
+  }, [dispatch]);
+
+  const itemsPerPage = 5;
+  const totalPage = Math.ceil(data.length / 5);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentItems = data.slice(startIndex, endIndex); // searchResult에 맞는 결과도 보여주기
 
 	return (
 		<Container>
@@ -30,16 +42,29 @@ const Main = () :JSX.Element => {
 				<div>
 				<label htmlFor="sort">정렬 기준 : </label>
 					<select name="sort">
+						<option value="default">기본</option>
 						<option value="recent">최신순</option>
-						<option value="title">제목 순</option>
-						<option value="search">조회수 순</option>
+						<option value="title">제목순</option>
 					</select>
 				</div>
 			</BtnDiv>
 			<Items>
-				<Poster />
+				{loading ? <>Loading...</> : 
+					currentItems.map((info) => 
+					<Poster
+						key={info.localId}
+						title={info.title}
+						age={info.age}
+						genre={info.genre}
+						period={info.period}
+						duration={info.duration}
+						imageUrl={info.imageUrl}
+						author={info.author}
+						localId={info.localId}
+					/>)
+				}
 			</Items>
-			<Pagination currentPage={currentPage} totalPages={data?.totalCount || 5} onPageChange={setCurrentPage} />
+			<Pagination currentPage={currentPage} totalPages={totalPage} onPageChange={setCurrentPage} />
 		</Container>
 	)
 }
@@ -63,7 +88,7 @@ const Items = styled.ul`
 	max-width: 1280px;
 	padding: none;
 	margin: 0 auto;
-	margin-top: 60px;
+	margin-top: 30px;
 
 	display: flex;
 	flex-direction: rows;
@@ -72,5 +97,4 @@ const Items = styled.ul`
 	flex-wrap: wrap;
 
 	gap: 10px;
-	border: 1px solid #000;
 `

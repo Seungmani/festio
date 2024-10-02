@@ -20,6 +20,15 @@ exports.fetchAndSaveData = functions.https.onRequest(async (req, res) => {
         age: item.AUDIENCE || '',
         period: item.PERIOD || '',
         time: item.EVENT_PERIOD || '',
+        author: item.AUTHOR || '',
+        actor: item.ACTOR || '',
+        contact: item.CONTACT_POINT || '',
+        charge: item.CHARGE || '',
+        numberPages: item.NUMBER_PAGES || '',
+        duration: item.DURATION || '',
+        subDescription: item.SUB_DESCRIPTION || '',
+        spatial: item.SPATIAL_COVERAGE || '',
+        site: item.EVENT_SITE || '',
       };
 
       const docRef = admin.firestore().collection('apiData').doc(data.localId);
