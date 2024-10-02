@@ -1,8 +1,7 @@
 import { useState } from "react";
 import styled from '@emotion/styled';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from "../redux/store";
-import { useGetEventDataQuery } from "../redux/api";
 
 import Pagination from "../components/Main/Pagination";
 import Header from "../components/Header/Header";
@@ -12,15 +11,8 @@ import Poster from "../components/Main/Poster";
 const Main = () :JSX.Element => {
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [searchResult, setSearchResult] = useState<string>("");
-	const { data, isLoading} = useGetEventDataQuery({
-		apiKey: import.meta.env.VITE_DATA_API,
-    currentPage,
-    numOfRows: 5,
-	});
 	const user = useSelector((state: RootState) => state.user);
-	const dispatch = useDispatch();
 
-	if(isLoading) {<>Loading...</>}
 
 	return (
 		<Container>
