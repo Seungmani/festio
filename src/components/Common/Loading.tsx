@@ -15,8 +15,6 @@ const IMG = styled(`img`)`
 	left: 50%;
 	transform: translate(-50%, -50%);
 
-	width: 30px;
-	height: 30px;
+	width: 50px;
+	height: 50px;
 `
-
-// 마지막에 개발

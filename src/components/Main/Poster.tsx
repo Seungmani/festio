@@ -28,11 +28,11 @@ const Poster = React.memo(({
 	return(
 		<Item to={`/DetailPage/${localId}`}>
 			<Img src={imageUrl} alt="title"/>
-			<P>제목: {title}</P>
-			<P>작가: {author}</P>
-			<P>장르: {genre}</P>
-			<P>연령: {age}</P>
-			<P>기간: {period}</P>
+			{title && <P>제목: {title}</P>}
+			{author && <P>작가: {author}</P>}
+			{genre && <P>장르: {genre}</P>}
+			{age && <P>연령: {age}</P>}
+			{period && <P>기간: {period}</P>}
 			{duration && <P>시간: {duration}</P>}
 		</Item>
 	)
@@ -54,8 +54,15 @@ const Img = styled("img")`
 `
 
 const P = styled("p")`
-	font-size: 12px;
-	margin-left: 20px;
-	color: ${Color.BLACK};
 	pointer-events: none;
+
+	margin-left: 20px;
+	margin-bottom: 2px;
+
+	font-size: 12px;
+	color: ${Color.BLACK};
+	overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
 `
