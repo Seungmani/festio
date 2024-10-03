@@ -122,15 +122,14 @@ export default Main;
 const Container = styled.div`
   max-width: 1280px;
 	margin: 0 auto;
-	padding-top: 30px;
+	padding: 20px 0;
 `
 
 const Items = styled.ul`
 	max-width: 1280px;
 	height: 350px;
 	padding: none;
-	margin: 0 auto;
-	margin-top: 30px;
+	margin: 30px auto;
 
 	display: flex;
 	flex-direction: rows;

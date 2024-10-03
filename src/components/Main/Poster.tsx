@@ -23,8 +23,7 @@ const Poster = React.memo(({
   imageUrl,
 	author,
 	localId,
-}: PosterProps
-): JSX.Element => {
+}: PosterProps) : JSX.Element => {
 	return(
 		<Item to={`/DetailPage/${localId}`}>
 			<Img src={imageUrl} alt="title"/>
@@ -43,23 +42,33 @@ export default Poster;
 const Item = styled(Link)`
 	width: 220px;
 	height: 350px;
-	border: 1px solid #000;
 	text-decoration: none;
+
+	border: 1px solid ${Color.BLACK};
+	border-radius: 20px;
+	box-shadow: 5px 5px 3px #666;
+
+	transition: transform 0.3s ease-in-out;
+  transform-origin: center bottom;
+
+	: hover {
+		transform: translateY(-10px);;
+	}
 `
 
 const Img = styled("img")`
 	width: 150px;
 	height: 200px;
-	margin: 10px 35px;
+	margin: 20px 35px;
 `
 
 const P = styled("p")`
 	pointer-events: none;
 
-	margin-left: 20px;
+	margin-left: 15px;
 	margin-bottom: 2px;
 
-	font-size: 12px;
+	font-size: 14px;
 	color: ${Color.BLACK};
 	overflow: hidden;
   white-space: nowrap;

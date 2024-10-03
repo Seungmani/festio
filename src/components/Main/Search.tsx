@@ -35,7 +35,7 @@ export default Search;
 const SearchDiv = styled.div`
 	max-width: 676px;
   width: 100%;
-  height: 35px;
+  height: 40px;
 	margin: 0 auto;
 
 	display: flex;
@@ -45,7 +45,6 @@ const SearchDiv = styled.div`
 	border: 1px solid ${Color.BLACK};
 	border-radius: 20px;
 
-
 	:focus {
 		outline: none;
 		border-color: ${Color.MAIN};
@@ -54,7 +53,7 @@ const SearchDiv = styled.div`
 
 const SearchOptionSelect = styled.select`
 	width: 80px;
-  height: 25px;
+  height: 30px;
 	margin: 0 10px;
 	border: none;
 `
@@ -63,7 +62,7 @@ const SearchInput = styled.input`
 	box-sizing: border-box;
 
   width: 560px;
-	height: 25px;
+	height: 30px;
 	padding: 0 10px;
 
 	border: none;
