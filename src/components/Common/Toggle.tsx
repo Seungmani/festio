@@ -1,17 +1,20 @@
 import React from "react";
-import { LuEye, LuEyeOff } from "react-icons/lu";
-
+import { LuEye, LuEyeOff, LuSparkles } from "react-icons/lu";
+import Color from "../../constants/Color";
 interface ToggleProps {
   type: string;
-  show: boolean;
+  show?: boolean;
+  like?: boolean;
 }
 
-const Toggle = React.memo(({type, show}: ToggleProps): JSX.Element => {
+const Toggle = React.memo(({type, show, like}: ToggleProps) => {
 
-  return (
-    <>
-      {type === "password" && !show ? <LuEyeOff size="20" /> : <LuEye size="20" />}
-    </>
+  if (type === "password") return (
+    !show ? <LuEyeOff size="20" /> : <LuEye size="20" />
+  )
+
+  if (type === "like") return (
+    !like ? <LuSparkles style={{ color: `${Color.BLACK}` }} size={20}/> : <LuSparkles style={{ color: `${Color.KAKAO}`, fill: `${Color.KAKAO}` }} size={20} />
   )
 
 });
