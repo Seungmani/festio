@@ -1,4 +1,3 @@
-// src/redux/apiDataSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface ApiDataProps {

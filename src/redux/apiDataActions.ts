@@ -36,7 +36,6 @@ export const fetchApiData = () => async (dispatch: AppDispatch) => {
 			site: doc.data().site,
       ...doc.data(),
     })) as ApiDataProps[];
-		console.log("apiData", apiData);
     dispatch(fetchApiDataSuccess(apiData));
   } catch (error) {
     dispatch(fetchApiDataFailure((error as Error).message));

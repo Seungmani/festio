@@ -16,7 +16,6 @@ const Search = React.memo(({handleSearch, setSearchOption}: SearchProps):JSX.Ele
 		else setPlaceholder(`${e.target.value}를 검색하세요`);
 	}
 
-
   return(
 	<SearchDiv>
 		<SearchOptionSelect onChange={handleOnChange}>

@@ -1,31 +1,62 @@
-import { useEffect, useState, useTransition  } from "react";
+import { useEffect, useState, useTransition } from "react";
 import styled from '@emotion/styled';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "../redux/store";
+
+import { ApiDataProps, fetchApiDataSuccess } from "../redux/apiDataSlice";
+import { useGetEventDataQuery } from "../redux/api";
+import FilterControls from "../components/Main/FilterControl";
 
 import Pagination from "../components/Main/Pagination";
 import Header from "../components/Header/Header";
 import Search from "../components/Main/Search";
 import Poster from "../components/Main/Poster";
-import { fetchApiData } from "../redux/apiDataActions";
 import Loading from "../components/Common/Loading";
-import { ApiDataProps } from "../redux/apiDataSlice";
+
+const ITEMS_PER_PAGE = 5;
+
+const getSortedItems = (data: ApiDataProps[], sortOption: string) => {
+	return [...data].sort((a, b) => {
+		if (sortOption === "recent") {
+			const dateA = new Date(a.period.split('~')[0].trim());
+			const dateB = new Date(b.period.split('~')[0].trim());
+			return dateB.getTime() - dateA.getTime();
+		}
+		if (sortOption === "title") {
+			return a.title.localeCompare(b.title);
+		}
+		return 0;
+	});
+}
 
 const Main = () :JSX.Element => {
 	const [currentPage, setCurrentPage] = useState<number>(1);
-	const [searchResult, setSearchResult] = useState<string>("");
 	const [searchOption, setSearchOption] = useState<string>("공연이름");
 	const [isPending, startTransition] = useTransition();
 	const [sortOption, setSortOption] = useState<string>("default");
 	const [data, setData] = useState<ApiDataProps[]>([]);
+
 	const user = useSelector((state: RootState) => state.user);
-	const { data: apiData, loading } = useSelector((state: RootState) => state.apiData);
+	const { data: apiData, isLoading} = useGetEventDataQuery({
+		apiKey: import.meta.env.VITE_DATA_API,
+	});
+	
 	const dispatch = useDispatch();
 
+	/** db에서 뽑기 -> firebase db 용량 초과....
+	 * import { useEffect, useState } from "react";
+	* const { data: apiData, loading} = useSelector((state: RootState) => state.apiData);
+
+		useEffect(() => {
+			if (apiData.length === 0) dispatch(fetchApiData()); // 컴포넌트 마운트 시 데이터 가져오기
+			else setData(apiData)
+		}, [dispatch]);
+	*/
+
   useEffect(() => {
-    if (apiData.length === 0) dispatch(fetchApiData());
-    setData(apiData);
-  }, [dispatch, apiData]);
+    setData(apiData || []);
+		dispatch(fetchApiDataSuccess(apiData));
+  }, [apiData]);
 
 	const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		setSortOption(e.target.value);
@@ -33,9 +64,8 @@ const Main = () :JSX.Element => {
 
 	const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const searchValue = e.target.value;
-		setSearchResult(searchValue);
 		startTransition(() => {
-			const filteredData = data.filter(item => {
+			const filteredData = apiData?.filter(item => {
 				if (searchOption === "공연이름") return item.title.includes(searchValue);
 				if (searchOption === "작가") return item.author.includes(searchValue);
 				if (searchOption === "장르") return item.genre.includes(searchValue);
@@ -50,48 +80,23 @@ const Main = () :JSX.Element => {
 		});
 	};
 
-  const itemsPerPage = 5;
-  const totalPage = Math.ceil(data.length / 5);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-
-	const sortedData = [...data].sort((a, b) => {
-		if (sortOption === "recent") {
-			const startDateA = new Date(a.period.split('~')[0].trim());
-			const startDateB = new Date(b.period.split('~')[0].trim());
-			return startDateB.getTime() - startDateA.getTime();
-		} else if (sortOption === "title") {
-			return a.title.localeCompare(b.title);
-		}
-		return 0;
-	});
-  const currentItems = sortedData.slice(startIndex, endIndex); 
-	console.log(data, sortedData, currentItems)
+	const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
+	const currentItems = getSortedItems(data, sortOption).slice(
+		(currentPage - 1) * ITEMS_PER_PAGE,
+		currentPage * ITEMS_PER_PAGE
+	);
 
 	return (
 		<Container>
 			<Header user={user.isAuthenticated}/>
 			<Search handleSearch={handleSearch} setSearchOption={setSearchOption}/> {/* 검색 값 넘기기  */}
-			<BtnDiv>
-				<div>
-					{ user.isAuthenticated ? 
-					<>
-						<input type="checkbox" name="likes"/>
-						<label htmlFor="likes">즐겨찾기만 보기</label>
-					</>	: null
-				}
-				</div>
-				<div>
-				<label htmlFor="sort">정렬 기준 : </label>
-					<select name="sort" onChange={handleSortChange} value={sortOption}>
-						<option value="default">기본</option>
-						<option value="recent">최신순</option>
-						<option value="title">제목순</option>
-					</select>
-				</div>
-			</BtnDiv>
+			<FilterControls 
+				user={user} 
+				sortOption={sortOption} 
+				onSortChange={handleSortChange} 
+			/>
 			<Items>
-				{loading ? <Loading/> : 
+				{isLoading ? <Loading/> : 
 				(currentItems && currentItems.length > 0 ? 
 					currentItems.map((info) => 
 						<Poster
@@ -109,7 +114,7 @@ const Main = () :JSX.Element => {
 				)
 				}
 			</Items>
-			<Pagination currentPage={currentPage} totalPages={totalPage} onPageChange={setCurrentPage} />
+			<Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
 		</Container>
 	)
 }
@@ -120,13 +125,6 @@ const Container = styled.div`
   max-width: 1280px;
 	margin: 0 auto;
 	padding-top: 30px;
-`
-
-const BtnDiv = styled.div`
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
 `
 
 const Items = styled.ul`
