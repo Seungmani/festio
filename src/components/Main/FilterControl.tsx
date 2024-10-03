@@ -7,14 +7,15 @@ interface FilterControlsProps {
 	};
 	sortOption: string;
 	onSortChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+	onClick: () => void;
 }
 
-const FilterControls = React.memo(({ user, sortOption, onSortChange }: FilterControlsProps) => (
+const FilterControls = React.memo(({ user, sortOption, onSortChange, onClick }: FilterControlsProps) => (
 	<BtnDiv>
 		<div>
 		{ user.isAuthenticated ? 
 			<>
-				<input type="checkbox" name="likes"/>
+				<input type="checkbox" name="likes" onClick={onClick}/>
 				<label htmlFor="likes">즐겨찾기만 보기</label>
 			</>	: null
 		}

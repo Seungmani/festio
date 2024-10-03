@@ -14,23 +14,10 @@ import Loading from "../components/Common/Loading";
 
 const ITEMS_PER_PAGE = 5;
 
-const getSortedItems = (data: ApiDataProps[], sortOption: string) => {
-	return [...data].sort((a, b) => {
-		if (sortOption === "recent") {
-			const dateA = new Date(a.period.split('~')[0].trim());
-			const dateB = new Date(b.period.split('~')[0].trim());
-			return dateB.getTime() - dateA.getTime();
-		}
-		if (sortOption === "title") {
-			return a.title.localeCompare(b.title);
-		}
-		return 0;
-	});
-}
-
 const Main = () :JSX.Element => {
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [searchOption, setSearchOption] = useState<string>("공연이름");
+	const [isShowOnlyLiked, setIsShowOnlyLiked] = useState<boolean>(false);
 	const [isPending, startTransition] = useTransition();
 	const [sortOption, setSortOption] = useState<string>("default");
 	const [data, setData] = useState<ApiDataProps[]>([]);
@@ -79,8 +66,24 @@ const Main = () :JSX.Element => {
 		});
 	};
 
+	const getSortedItems = (data: ApiDataProps[], sortOption: string, isLiked: boolean) => {
+		if (isLiked) data = data.filter((item) => user.likes.includes(item.localId));
+	
+		return [...data].sort((a, b) => {
+			if (sortOption === "recent") {
+				const dateA = new Date(a.period.split('~')[0].trim());
+				const dateB = new Date(b.period.split('~')[0].trim());
+				return dateB.getTime() - dateA.getTime();
+			}
+			if (sortOption === "title") {
+				return a.title.localeCompare(b.title);
+			}
+			return 0;
+		});
+	}
+
 	const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
-	const currentItems = getSortedItems(data, sortOption).slice(
+	const currentItems = getSortedItems(data, sortOption, isShowOnlyLiked).slice(
 		(currentPage - 1) * ITEMS_PER_PAGE,
 		currentPage * ITEMS_PER_PAGE
 	);
@@ -92,6 +95,7 @@ const Main = () :JSX.Element => {
 				user={user} 
 				sortOption={sortOption} 
 				onSortChange={handleSortChange} 
+				onClick={() => setIsShowOnlyLiked(!isShowOnlyLiked)}
 			/>
 			<Items>
 				{isLoading ? <Loading/> : 
