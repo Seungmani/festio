@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition  } from "react";
 import styled from '@emotion/styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from "../redux/store";
@@ -9,28 +9,52 @@ import Search from "../components/Main/Search";
 import Poster from "../components/Main/Poster";
 import { fetchApiData } from "../redux/apiDataActions";
 import Loading from "../components/Common/Loading";
+import { ApiDataProps } from "../redux/apiDataSlice";
 
 const Main = () :JSX.Element => {
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [searchResult, setSearchResult] = useState<string>("");
 	const [searchOption, setSearchOption] = useState<string>("공연이름");
+	const [isPending, startTransition] = useTransition();
 	const [sortOption, setSortOption] = useState<string>("default");
+	const [data, setData] = useState<ApiDataProps[]>([]);
 	const user = useSelector((state: RootState) => state.user);
-	const { data, loading } = useSelector((state: RootState) => state.apiData);
+	const { data: apiData, loading } = useSelector((state: RootState) => state.apiData);
 	const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchApiData());
-  }, [dispatch]);
+    if (apiData.length === 0) dispatch(fetchApiData());
+    setData(apiData);
+  }, [dispatch, apiData]);
 
 	const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		setSortOption(e.target.value);
+	};
+
+	const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const searchValue = e.target.value;
+		setSearchResult(searchValue);
+		startTransition(() => {
+			const filteredData = data.filter(item => {
+				if (searchOption === "공연이름") return item.title.includes(searchValue);
+				if (searchOption === "작가") return item.author.includes(searchValue);
+				if (searchOption === "장르") return item.genre.includes(searchValue);
+				if (searchOption === "날짜") {
+					const result = new Date(searchValue);
+					const [first, last] = item.period.split("~");
+					return new Date(first) <= result && result <= new Date(last);
+				}
+			}
+			);
+      setData(searchValue ? filteredData : apiData);
+		});
 	};
 
   const itemsPerPage = 5;
   const totalPage = Math.ceil(data.length / 5);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
+
 	const sortedData = [...data].sort((a, b) => {
 		if (sortOption === "recent") {
 			const startDateA = new Date(a.period.split('~')[0].trim());
@@ -39,15 +63,15 @@ const Main = () :JSX.Element => {
 		} else if (sortOption === "title") {
 			return a.title.localeCompare(b.title);
 		}
-		return 0; // 기본 정렬
+		return 0;
 	});
-  const currentItems = sortedData.slice(startIndex, endIndex); // searchResult에 맞는 결과도 보여주기
-
+  const currentItems = sortedData.slice(startIndex, endIndex); 
+	console.log(data, sortedData, currentItems)
 
 	return (
 		<Container>
 			<Header user={user.isAuthenticated}/>
-			<Search setSearchResult={setSearchResult} setSearchOption={setSearchOption}/> {/* 검색 값 넘기기  */}
+			<Search handleSearch={handleSearch} setSearchOption={setSearchOption}/> {/* 검색 값 넘기기  */}
 			<BtnDiv>
 				<div>
 					{ user.isAuthenticated ? 
@@ -68,18 +92,21 @@ const Main = () :JSX.Element => {
 			</BtnDiv>
 			<Items>
 				{loading ? <Loading/> : 
+				(currentItems && currentItems.length > 0 ? 
 					currentItems.map((info) => 
-					<Poster
-						key={info.localId}
-						title={info.title}
-						age={info.age}
-						genre={info.genre}
-						period={info.period}
-						duration={info.duration}
-						imageUrl={info.imageUrl}
-						author={info.author}
-						localId={info.localId}
-					/>)
+						<Poster
+							key={info.localId}
+							title={info.title}
+							age={info.age}
+							genre={info.genre}
+							period={info.period}
+							duration={info.duration}
+							imageUrl={info.imageUrl}
+							author={info.author}
+							localId={info.localId}
+						/>
+					) : <div>검색 결과가 없습니다.</div>
+				)
 				}
 			</Items>
 			<Pagination currentPage={currentPage} totalPages={totalPage} onPageChange={setCurrentPage} />

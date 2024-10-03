@@ -4,7 +4,7 @@ import {
   fetchApiDataStart,
   fetchApiDataSuccess,
   fetchApiDataFailure,
-	ApiData,
+	ApiDataProps,
 } from './apiDataSlice';
 import { AppDispatch } from './store';
 
@@ -35,8 +35,8 @@ export const fetchApiData = () => async (dispatch: AppDispatch) => {
 			spatial: doc.data().spatial,
 			site: doc.data().site,
       ...doc.data(),
-    })) as ApiData[];
-
+    })) as ApiDataProps[];
+		console.log("apiData", apiData);
     dispatch(fetchApiDataSuccess(apiData));
   } catch (error) {
     dispatch(fetchApiDataFailure((error as Error).message));

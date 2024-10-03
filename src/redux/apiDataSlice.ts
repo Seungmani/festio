@@ -1,7 +1,7 @@
 // src/redux/apiDataSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export interface ApiData {
+export interface ApiDataProps {
 	age: string;
 	call: string
 	description: string
@@ -24,7 +24,7 @@ export interface ApiData {
 }
 
 interface ApiDataState {
-  data: ApiData[];
+  data: ApiDataProps[];
   loading: boolean;
   error: string | null;
 }
@@ -43,7 +43,7 @@ const apiDataSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    fetchApiDataSuccess(state, action: PayloadAction<ApiData[]>) {
+    fetchApiDataSuccess(state, action: PayloadAction<ApiDataProps[]>) {
       state.data = action.payload;
       state.loading = false;
     },

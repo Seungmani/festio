@@ -3,19 +3,19 @@ import Color from "../../constants/Color";
 import React, { useState } from "react";
 
 interface SearchProps {
-	setSearchResult: (value: string) => void;
+	handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	setSearchOption: (value: string) => void;
 }
 
-const Search = React.memo(({setSearchResult}: SearchProps):JSX.Element => {
+const Search = React.memo(({handleSearch, setSearchOption}: SearchProps):JSX.Element => {
 	const [placeholder, setPlaceholder] = useState<string>("공연 이름을 검색하세요");
 
 	const handleOnChange =(e: React.ChangeEvent) => {
-		setPlaceholder(`${e.target.value}를 검색하세요`);
+		setSearchOption(e.target.value);
+		if (e.target.value === "날짜") setPlaceholder(`2015-10-10 형식으로 검색해 주세요.`);
+		else setPlaceholder(`${e.target.value}를 검색하세요`);
 	}
 
-	const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setSearchResult(e.target.value);
-	}
 
   return(
 	<SearchDiv>
@@ -25,7 +25,7 @@ const Search = React.memo(({setSearchResult}: SearchProps):JSX.Element => {
 			<option value="장르">장르</option>
 			<option value="날짜">날짜</option>
 		</SearchOptionSelect>
-		<SearchInput type="text" placeholder={placeholder} onChange={handleInput}/>
+		<SearchInput type="text" placeholder={placeholder} onChange={handleSearch}/>
 	</SearchDiv>
 	)
 });
