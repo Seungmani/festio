@@ -44,6 +44,7 @@ const Header = React.memo(({user}: HeaderProps):JSX.Element => {
 export default Header;
 
 const HeaderDiv = styled.div`
+	max-width: 1280px;
 	width: 100%;
 	height: 50px;
 	margin-bottom: 30px;

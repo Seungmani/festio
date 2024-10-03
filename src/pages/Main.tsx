@@ -8,7 +8,6 @@ import { useGetEventDataQuery } from "../redux/api";
 import FilterControls from "../components/Main/FilterControl";
 
 import Pagination from "../components/Main/Pagination";
-import Header from "../components/Header/Header";
 import Search from "../components/Main/Search";
 import Poster from "../components/Main/Poster";
 import Loading from "../components/Common/Loading";
@@ -88,7 +87,6 @@ const Main = () :JSX.Element => {
 
 	return (
 		<Container>
-			<Header user={user.isAuthenticated}/>
 			<Search handleSearch={handleSearch} setSearchOption={setSearchOption}/> {/* 검색 값 넘기기  */}
 			<FilterControls 
 				user={user} 
