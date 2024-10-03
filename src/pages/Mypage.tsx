@@ -1,11 +1,14 @@
 import styled from '@emotion/styled';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
-const Mypage = () :JSX.Element => {
+const MyPage = () :JSX.Element => {
+	const user = useSelector((state: RootState) => state.user)
+	console.log(user)
 	return (
 		<div>
-			Mypage
 		</div>
 	)
 }
 
-export default Mypage;
+export default MyPage;

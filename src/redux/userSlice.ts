@@ -1,13 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface UserSliceProps {
-	user: null | string
+	user: null | string;
 	isAuthenticated: boolean;
+  likes: string[];
 }
 
 const initialState: UserSliceProps = {
   user: null,
   isAuthenticated: false,
+  likes: ["10026390"],
 };
 
 const userSlice = createSlice({
@@ -22,8 +24,11 @@ const userSlice = createSlice({
       state.user = null;
       state.isAuthenticated = false;
     },
+    setLike(state, action) {
+      state.likes = action.payload;
+    },
   },
 });
 
-export const { setUser, clearUser } = userSlice.actions;
+export const { setUser, clearUser, setLike } = userSlice.actions;
 export default userSlice.reducer;

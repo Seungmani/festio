@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { setUser } from "../../redux/userSlice";
+import { setUser, setLike } from "../../redux/userSlice";
 import { useDispatch } from "react-redux";
 import styled from '@emotion/styled';
 
@@ -38,6 +38,8 @@ const LoginForm = React.memo((): JSX.Element => {
         email: user.email,
         phone: userDoc.data().phone,
       }));
+
+			dispatch(setLike(userDoc.data().likes || ["10026390"]));
 			
       alert("로그인 성공!");
 			navigate('/', { replace: true });

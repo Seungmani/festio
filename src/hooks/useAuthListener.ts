@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-import { setUser, clearUser } from '../redux/userSlice';
+import { setUser, clearUser, setLike } from '../redux/userSlice';
 import { auth, db } from '../firebase';
 
 const useAuthListener = () => {
@@ -18,6 +18,8 @@ const useAuthListener = () => {
           email: user.email,
           phone: userDoc.data().phone,
         }));
+
+        dispatch(setLike(userDoc.data().likes || ["10026390"]));
       } else {
         dispatch(clearUser());
       }

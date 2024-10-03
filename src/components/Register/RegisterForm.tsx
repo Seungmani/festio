@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setUser } from "../../redux/userSlice";
+import { setUser, setLike } from "../../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 
@@ -9,7 +9,6 @@ import PasswordInput from "../Common/PasswordInput";
 import Button from "../Common/Button";
 import EmailDuplicationBtn from "./EmailDuplicationBtn";
 import useFormState from "../../hooks/useFormState";
-
 
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase";
@@ -49,6 +48,7 @@ const RegisterForm = React.memo((): JSX.Element => {
         email: formState.email.value,
         phone: formState.phone.value,
         name: formState.name.value,
+				likes: [],
         createdAt: new Date(),
       });
 
@@ -57,6 +57,8 @@ const RegisterForm = React.memo((): JSX.Element => {
         email: user.email,
         phone: formState.phone.value,
       }));
+
+			dispatch(setLike([]));
 
       alert("회원가입이 완료되었습니다!");
 			navigate('/login', { replace: true });
