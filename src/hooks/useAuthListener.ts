@@ -19,7 +19,7 @@ const useAuthListener = () => {
           phone: userDoc.data().phone,
         }));
 
-        dispatch(setLike(userDoc.data().likes || ["10026390"]));
+        dispatch(setLike(userDoc.data().likes));
       } else {
         dispatch(clearUser());
       }

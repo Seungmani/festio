@@ -39,7 +39,7 @@ const LoginForm = React.memo((): JSX.Element => {
         phone: userDoc.data().phone,
       }));
 
-			dispatch(setLike(userDoc.data().likes || ["10026390"]));
+			dispatch(setLike(userDoc.data().likes));
 			
       alert("로그인 성공!");
 			navigate('/', { replace: true });

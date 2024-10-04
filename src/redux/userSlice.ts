@@ -9,7 +9,7 @@ interface UserSliceProps {
 const initialState: UserSliceProps = {
   user: null,
   isAuthenticated: false,
-  likes: ["10026390"],
+  likes: [],
 };
 
 const userSlice = createSlice({
