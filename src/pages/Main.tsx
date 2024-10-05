@@ -1,92 +1,92 @@
-import { useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
 import styled from '@emotion/styled';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "../redux/store";
 
-import { ApiDataProps, fetchApiDataSuccess } from "../redux/apiDataSlice";
-import { useGetEventDataQuery } from "../redux/api";
 import FilterControls from "../components/Main/FilterControl";
 
 import Pagination from "../components/Main/Pagination";
 import Search from "../components/Main/Search";
 import Poster from "../components/Main/Poster";
 import Loading from "../components/Common/Loading";
+import { fetchApiData } from "../redux/apiDataActions";
 
 const ITEMS_PER_PAGE = 5;
 
 const Main = () :JSX.Element => {
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [searchOption, setSearchOption] = useState<string>("공연이름");
+	const [searchTerm, setSearchTerm] = useState<string>("");
 	const [isShowOnlyLiked, setIsShowOnlyLiked] = useState<boolean>(false);
 	const [isPending, startTransition] = useTransition();
 	const [sortOption, setSortOption] = useState<string>("default");
-	const [data, setData] = useState<ApiDataProps[]>([]);
 
-	const user = useSelector((state: RootState) => state.user);
-	const { data: apiData, isLoading} = useGetEventDataQuery({
-		apiKey: import.meta.env.VITE_DATA_API,
-	});
-	
 	const dispatch = useDispatch();
+	const user = useSelector((state: RootState) => state.user);
+	const { data: apiData, loading } = useSelector((state: RootState) => state.apiData);
 
-	/** db에서 뽑기 -> firebase db 용량 초과....
-	 * import { useEffect, useState } from "react";
-	* const { data: apiData, loading} = useSelector((state: RootState) => state.apiData);
+	useEffect(() => {
+		if (apiData.length === 0) {dispatch(fetchApiData());
+		console.log("useEffect - Main", apiData);
+		}
+	}, [dispatch, apiData]);
 
-		useEffect(() => {
-			if (apiData.length === 0) dispatch(fetchApiData()); // 컴포넌트 마운트 시 데이터 가져오기
-			else setData(apiData)
-		}, [dispatch]);
-	*/
+  const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchValue = e.target.value;
+    setSearchTerm(searchValue);
+    startTransition(() => {
+      setCurrentPage(1);
+    });
+  }, []);
 
-  useEffect(() => {
-    setData(apiData || []);
-		dispatch(fetchApiDataSuccess(apiData));
-  }, [apiData]);
+  const handleSortChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortOption(e.target.value);
+  }, []);
 
-	const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setSortOption(e.target.value);
-	};
+	const filteredAndSortedData = useMemo(() => {
+		console.log("apiData", apiData);
+    let filteredData = apiData;
 
-	const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const searchValue = e.target.value;
-		startTransition(() => {
-			const filteredData = apiData?.filter(item => {
-				if (searchOption === "공연이름") return item.title.includes(searchValue);
-				if (searchOption === "작가") return item.author.includes(searchValue);
-				if (searchOption === "장르") return item.genre.includes(searchValue);
-				if (searchOption === "날짜") {
-					const result = new Date(searchValue);
-					const [first, last] = item.period.split("~");
-					return new Date(first) <= result && result <= new Date(last);
-				}
-			}
-			);
-      setData(searchValue ? filteredData : apiData);
-		});
-	};
+    if (searchTerm) {
+      filteredData = apiData.filter(item => {
+        if (searchOption === "공연이름") return item.title.includes(searchTerm);
+        if (searchOption === "작가") return item.author.includes(searchTerm);
+        if (searchOption === "장르") return item.genre.includes(searchTerm);
+        if (searchOption === "날짜") {
+          const result = new Date(searchTerm);
+          const [first, last] = item.period.split("~");
+          return new Date(first) <= result && result <= new Date(last);
+        }
+        return false;
+      });
+    }
 
-	const getSortedItems = (data: ApiDataProps[], sortOption: string, isLiked: boolean) => {
-		if (isLiked) data = data.filter((item) => user.likes.includes(item.localId));
-	
-		return [...data].sort((a, b) => {
-			if (sortOption === "recent") {
-				const dateA = new Date(a.period.split('~')[0].trim());
-				const dateB = new Date(b.period.split('~')[0].trim());
-				return dateB.getTime() - dateA.getTime();
-			}
-			if (sortOption === "title") {
-				return a.title.localeCompare(b.title);
-			}
-			return 0;
-		});
-	}
+    if (isShowOnlyLiked) {
+      filteredData = filteredData.filter(item => user.likes.includes(item.localId));
+    }
 
-	const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
-	const currentItems = getSortedItems(data, sortOption, isShowOnlyLiked).slice(
-		(currentPage - 1) * ITEMS_PER_PAGE,
-		currentPage * ITEMS_PER_PAGE
-	);
+  if (sortOption === "recent") {
+    return [...filteredData].sort((a, b) => {
+      const dateA = new Date(a.period.split('~')[0].trim());
+      const dateB = new Date(b.period.split('~')[0].trim());
+      return dateB.getTime() - dateA.getTime();
+    });
+  }
+
+  if (sortOption === "title") {
+    return [...filteredData].sort((a, b) => a.title.localeCompare(b.title));
+  }
+
+  return filteredData;
+  }, [apiData, searchTerm, searchOption, isShowOnlyLiked, sortOption]);
+
+  const currentItems = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredAndSortedData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [currentPage, filteredAndSortedData]);
+
+  const totalPages = useMemo(() => Math.ceil(filteredAndSortedData.length / ITEMS_PER_PAGE), [filteredAndSortedData]);
+
 
 	return (
 		<Container>
@@ -98,7 +98,7 @@ const Main = () :JSX.Element => {
 				onClick={() => setIsShowOnlyLiked(!isShowOnlyLiked)}
 			/>
 			<Items>
-				{isLoading ? <Loading/> : 
+				{loading ? <Loading/> : 
 				(currentItems && currentItems.length > 0 ? 
 					currentItems.map((info) => 
 						<Poster

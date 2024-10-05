@@ -1,43 +1,61 @@
+import styled from '@emotion/styled';
+
 import { db } from '../firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
-import styled from '@emotion/styled';
-import { useParams } from 'react-router';
-import Toggle from '../components/Common/Toggle';
-import { useDispatch, useSelector } from 'react-redux';
+import { ApiDataProps } from '../redux/apiDataSlice';
 import { setLike } from '../redux/userSlice';
 import { RootState } from '../redux/store';
 
+import React, { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import Toggle from '../components/Common/Toggle';
+import Loading from '../components/Common/Loading';
 
 const DetailPage = React.memo(() :JSX.Element => {
-	const { localId } = useParams()
+	const { localId } = useParams();
 	const user = useSelector((state: RootState) => state.user);
-	const [info, setInfo] = useState({});
-	const [isLike, setIsLike] = useState<boolean>(user.likes.includes(localId)); // userDB에서 받아오기
+	const [info, setInfo] = useState<ApiDataProps| null>(null)
+	const [isLike, setIsLike] = useState<boolean>(user.likes.includes(localId || ""));
 	const dispatch = useDispatch();
 
-	useEffect(() => {
-		const fetchUserData = async (localId: string) => {
-			const apiDataSnapshot = await getDoc(doc(db, "apiData", localId));
-			setInfo(apiDataSnapshot.data())
-		};
+  const fetchApiData = useCallback(async () => {
+    if (!localId) return;
+    const apiDataSnapshot = await getDoc(doc(db, "apiData", localId));
+    setInfo(apiDataSnapshot.data() as ApiDataProps); // 타입 명시
+  }, [localId]);
 
-		fetchUserData(localId);
-	}, [])
+  useEffect(() => {
+    fetchApiData(); 
+  }, [fetchApiData]);
 
-	const handleLikeToggle = async () => {
-		if (isLike) dispatch(setLike(user.likes.filter((like) => like !== localId)));
-		else {
-			if (!user.likes.includes(localId)) dispatch(setLike([...user.likes, localId]));
-		}
+  const handleLikeToggle = useCallback(async () => {
+    const updatedLikes = isLike
+      ? user.likes.filter((like) => like !== localId)
+      : [...user.likes, localId];
 
-		await setDoc(doc(db, "users", user.user.uid), {
-			...user,
-			likes: [...user.likes, localId],
-		});
-		
-		setIsLike(!isLike);
-	};
+    dispatch(setLike(updatedLikes));
+
+    if (user.user) {
+      await setDoc(doc(db, "users", user.user.uid), {
+        ...user,
+        likes: updatedLikes,
+      });
+    }
+
+    setIsLike((prev) => !prev);
+  }, [isLike, localId, user, dispatch]);
+
+
+	const decodeHTMLEntities = useCallback((html: string) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    return doc.body.innerHTML; 
+	}, []);
+
+	if (!info) {
+    return <Loading/>;
+  }
 
 	return (
 		<>
@@ -55,7 +73,7 @@ const DetailPage = React.memo(() :JSX.Element => {
 						</ToggleDiv>
 						: null}
 					</UpperDiv>
-          <TextDiv><Info>설명 : </Info><Text>{info.description}</Text></TextDiv>
+          <TextDiv><Info>설명 : </Info><Text>{decodeHTMLEntities(info.description)}</Text></TextDiv>
           <TextDiv><Info>장르 : </Info><Text>{info.genre}</Text></TextDiv>
           <TextDiv><Info>연령 : </Info><Text>{info.age}</Text></TextDiv>
           <TextDiv><Info>기간 : </Info><Text>{info.period}</Text></TextDiv>
