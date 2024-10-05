@@ -26,9 +26,7 @@ const Main = () :JSX.Element => {
 	const { data: apiData, loading } = useSelector((state: RootState) => state.apiData);
 
 	useEffect(() => {
-		if (apiData.length === 0) {dispatch(fetchApiData());
-		console.log("useEffect - Main", apiData);
-		}
+		if (apiData.length === 0) dispatch(fetchApiData());
 	}, [dispatch, apiData]);
 
   const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,7 +42,6 @@ const Main = () :JSX.Element => {
   }, []);
 
 	const filteredAndSortedData = useMemo(() => {
-		console.log("apiData", apiData);
     let filteredData = apiData;
 
     if (searchTerm) {
@@ -131,15 +128,16 @@ const Container = styled.div`
 
 const Items = styled.ul`
 	max-width: 1280px;
-	height: 350px;
+	height: 370px;
 	padding: none;
 	margin: 30px auto;
 
 	display: flex;
 	flex-direction: rows;
 	justify-content: space-evenly;
+	align-items: center;
 	list-style-type: none;
-	flex-wrap: wrap;
 
 	gap: 10px;
+	overflow-x: scroll;
 `
