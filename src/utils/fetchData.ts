@@ -5,10 +5,10 @@ import {
   fetchApiDataSuccess,
   fetchApiDataFailure,
 	ApiDataProps,
-} from './apiDataSlice';
-import { AppDispatch } from './store';
+} from '../redux/apiDataSlice';
+import { AppDispatch } from '../redux/store';
 
-export const fetchApiData = () => async (dispatch: AppDispatch) => {
+export const fetchData = () => async (dispatch: AppDispatch) => {
   dispatch(fetchApiDataStart());
 
   try {

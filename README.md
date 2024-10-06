@@ -5,24 +5,27 @@
 ```text
 /src
 -/components
--- common
+-- common = 컴포넌트에서 공통으로 사용
 -- Header
 -- Login
 -- Register
 -- Main
--- ConcertInfo
+-- DetailPage
 -- UserProper
 -- Mypage
 
 -/redux
 -- store
+-- userSlice
+-- filterSlice
+-- apiDataSlice
 
 -/router
 -- Router
 
 -/ hooks
-
--/ components
+-- validate
+-- fetchData
 
 -/ pages
 -- Login

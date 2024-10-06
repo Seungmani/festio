@@ -9,7 +9,7 @@ import Pagination from "../components/Main/Pagination";
 import Search from "../components/Main/Search";
 import Poster from "../components/Main/Poster";
 import Loading from "../components/Common/Loading";
-import { fetchApiData } from "../redux/apiDataActions";
+import { fetchData } from "../utils/fetchData";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -26,7 +26,7 @@ const Main = () :JSX.Element => {
 	const { data: apiData, loading } = useSelector((state: RootState) => state.apiData);
 
 	useEffect(() => {
-		if (apiData.length === 0) dispatch(fetchApiData());
+		if (apiData.length === 0) dispatch(fetchData());
 	}, [dispatch, apiData]);
 
   const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
