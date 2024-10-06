@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-interface UserSliceProps {
+export interface UserSliceProps {
 	user: null | string;
 	isAuthenticated: boolean;
   likes: string[];
