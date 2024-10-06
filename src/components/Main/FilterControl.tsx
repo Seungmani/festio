@@ -1,35 +1,45 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { setIsShowLike } from "../../redux/filterSlice";
 
 interface FilterControlsProps {
 	user: {
 		isAuthenticated: boolean;
 	};
-	sortOption: string;
 	onSortChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-	onClick: () => void;
 }
 
-const FilterControls = React.memo(({ user, sortOption, onSortChange, onClick }: FilterControlsProps) => (
-	<BtnDiv>
-		<div>
-		{ user.isAuthenticated ? 
-			<>
-				<input type="checkbox" name="likes" onClick={onClick}/>
-				<label htmlFor="likes">즐겨찾기만 보기</label>
-			</>	: null
-		}
-		</div>
-		<div>
-			<label htmlFor="sort">정렬 : </label>
-			<select name="sort" onChange={onSortChange} value={sortOption}>
-				<option value="default">기본</option>
-				<option value="recent">최신순</option>
-				<option value="title">제목순</option>
-			</select>
-		</div>
-	</BtnDiv>
-));
+const FilterControls = React.memo(({ user, onSortChange }: FilterControlsProps): JSX.Element => {
+	const dispatch = useDispatch();
+	const { sortOption, isShowLike } = useSelector((state: RootState) => state.filter); 
+
+	const handleIsLikeToggle = useCallback(() => {
+    dispatch(setIsShowLike(!isShowLike)); 
+  }, [dispatch, isShowLike]);
+
+	return (
+		<BtnDiv>
+			<div>
+			{ user.isAuthenticated ? 
+				<>
+					<input type="checkbox" name="likes" onChange={handleIsLikeToggle} checked={isShowLike}/>
+					<label htmlFor="likes">즐겨찾기만 보기</label>
+				</>	: null
+			}
+			</div>
+			<div>
+				<label htmlFor="sort">정렬 : </label>
+				<select name="sort" onChange={onSortChange} value={sortOption}>
+					<option value="default">기본</option>
+					<option value="recent">최신순</option>
+					<option value="title">제목순</option>
+				</select>
+			</div>
+		</BtnDiv>
+	)
+});
 
 export default FilterControls;
 

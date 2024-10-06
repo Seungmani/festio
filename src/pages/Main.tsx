@@ -2,9 +2,9 @@ import { useCallback, useEffect, useMemo, useState, useTransition } from "react"
 import styled from '@emotion/styled';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "../redux/store";
+import { setSearchTerm, setSortOption, setIsShowLike } from "../redux/filterSlice";
 
 import FilterControls from "../components/Main/FilterControl";
-
 import Pagination from "../components/Main/Pagination";
 import Search from "../components/Main/Search";
 import Poster from "../components/Main/Poster";
@@ -15,11 +15,8 @@ const ITEMS_PER_PAGE = 5;
 
 const Main = () :JSX.Element => {
 	const [currentPage, setCurrentPage] = useState<number>(1);
-	const [searchOption, setSearchOption] = useState<string>("공연이름");
-	const [searchTerm, setSearchTerm] = useState<string>("");
-	const [isShowOnlyLiked, setIsShowOnlyLiked] = useState<boolean>(false);
+	const { search, searchOption, sortOption, isShowLike } = useSelector((state: RootState) => state.filter); 
 	const [isPending, startTransition] = useTransition();
-	const [sortOption, setSortOption] = useState<string>("default");
 
 	const dispatch = useDispatch();
 	const user = useSelector((state: RootState) => state.user);
@@ -31,26 +28,27 @@ const Main = () :JSX.Element => {
 
   const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = e.target.value;
-    setSearchTerm(searchValue);
+		dispatch(setSearchTerm(searchValue));
     startTransition(() => {
       setCurrentPage(1);
     });
-  }, []);
+  }, [dispatch]);
 
-  const handleSortChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortOption(e.target.value);
-  }, []);
+	const handleSortChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+		dispatch(setSortOption(e.target.value));
+  }, [dispatch]);
+
 
 	const filteredAndSortedData = useMemo(() => {
     let filteredData = apiData;
 
-    if (searchTerm) {
+    if (search) {
       filteredData = apiData.filter(item => {
-        if (searchOption === "공연이름") return item.title.includes(searchTerm);
-        if (searchOption === "작가") return item.author.includes(searchTerm);
-        if (searchOption === "장르") return item.genre.includes(searchTerm);
+        if (searchOption === "공연이름") return item.title.includes(search);
+        if (searchOption === "작가") return item.author.includes(search);
+        if (searchOption === "장르") return item.genre.includes(search);
         if (searchOption === "날짜") {
-          const result = new Date(searchTerm);
+          const result = new Date(search);
           const [first, last] = item.period.split("~");
           return new Date(first) <= result && result <= new Date(last);
         }
@@ -58,7 +56,7 @@ const Main = () :JSX.Element => {
       });
     }
 
-    if (isShowOnlyLiked) {
+    if (isShowLike) {
       filteredData = filteredData.filter(item => user.likes.includes(item.localId));
     }
 
@@ -75,7 +73,7 @@ const Main = () :JSX.Element => {
   }
 
   return filteredData;
-  }, [apiData, searchTerm, searchOption, isShowOnlyLiked, sortOption]);
+  }, [apiData, search, searchOption, isShowLike, sortOption]);
 
   const currentItems = useMemo(() => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -87,12 +85,10 @@ const Main = () :JSX.Element => {
 
 	return (
 		<Container>
-			<Search handleSearch={handleSearch} setSearchOption={setSearchOption}/> {/* 검색 값 넘기기  */}
+			<Search handleSearch={handleSearch} searchOption={searchOption}/>
 			<FilterControls 
 				user={user} 
-				sortOption={sortOption} 
 				onSortChange={handleSortChange} 
-				onClick={() => setIsShowOnlyLiked(!isShowOnlyLiked)}
 			/>
 			<Items>
 				{loading ? <Loading/> : 

@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { auth } from "../../firebase";
 import { clearUser } from "../../redux/userSlice";
 import { Link } from "react-router-dom";
+import { setIsShowLike } from "../../redux/filterSlice";
 
 interface HeaderProps {
 	user: boolean;
@@ -17,8 +18,9 @@ const Header = React.memo(({user}: HeaderProps):JSX.Element => {
 	const handleLogout = useCallback(async (e: React.MouseEvent) => {
 		e.preventDefault();
     try {
-      await signOut(auth); // Firebase에서 로그아웃
-      dispatch(clearUser()); // Redux에서 사용자 정보 초기화
+      await signOut(auth);
+      dispatch(clearUser());
+			dispatch(setIsShowLike(false));
     } catch (error) {
       console.error("로그아웃 실패: ", error);
 			alert("로그아웃 실패: ", error);

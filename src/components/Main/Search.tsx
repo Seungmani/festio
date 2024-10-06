@@ -1,24 +1,28 @@
 import styled from "@emotion/styled";
 import Color from "../../constants/Color";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setSearchOption } from "../../redux/filterSlice";
 
 interface SearchProps {
 	handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
-	setSearchOption: (value: string) => void;
+	searchOption: string;
 }
 
-const Search = React.memo(({handleSearch, setSearchOption}: SearchProps):JSX.Element => {
-	const [placeholder, setPlaceholder] = useState<string>("공연 이름을 검색하세요");
-
+const Search = React.memo(({handleSearch, searchOption}: SearchProps):JSX.Element => {
+	const [placeholder, setPlaceholder] = useState<string>(`${searchOption}를 검색하세요`);
+	const dispatch = useDispatch();
+	
 	const handleOnChange =(e: React.ChangeEvent) => {
-		setSearchOption(e.target.value);
+		dispatch(setSearchOption(e.target.value));
 		if (e.target.value === "날짜") setPlaceholder(`2015-10-10 형식으로 검색해 주세요.`);
+		if (e.target.value === "공연이름") setPlaceholder(`공연이름을 검색하세요.`);
 		else setPlaceholder(`${e.target.value}를 검색하세요`);
 	}
 
   return(
 	<SearchDiv>
-		<SearchOptionSelect onChange={handleOnChange}>
+		<SearchOptionSelect onChange={handleOnChange} value={searchOption}>
 			<option value="공연이름">공연이름</option>
 			<option value="작가">작가</option>
 			<option value="장르">장르</option>
