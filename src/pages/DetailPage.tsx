@@ -22,7 +22,7 @@ const DetailPage = React.memo(() :JSX.Element => {
   const fetchApiData = useCallback(async () => {
     if (!localId) return;
     const apiDataSnapshot = await getDoc(doc(db, "apiData", localId));
-    setInfo(apiDataSnapshot.data() as ApiDataProps); // 타입 명시
+    setInfo(apiDataSnapshot.data() as ApiDataProps);
   }, [localId]);
 
   useEffect(() => {
