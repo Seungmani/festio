@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { setUser, setLike } from "../../redux/userSlice";
 import { useDispatch } from "react-redux";
@@ -12,6 +12,7 @@ import useFormState from "../../hooks/useFormState";
 import { auth, db } from "../../firebase";
 import { signInWithEmailAndPassword, setPersistence, browserSessionPersistence} from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+import Loading from "../Common/Loading";
 
 const initialLoginState = {
   email: { value: '', errorText: '', isValid: false },
@@ -20,6 +21,7 @@ const initialLoginState = {
 
 const LoginForm = React.memo((): JSX.Element => {
 	const { formState, handleInputChange } = useFormState(initialLoginState);
+	const [loading, setLoading] = useState<boolean>(false);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	
@@ -28,7 +30,7 @@ const LoginForm = React.memo((): JSX.Element => {
 
 		try {
 			await setPersistence(auth, browserSessionPersistence);
-
+			setLoading(true);
       const userCredential = await signInWithEmailAndPassword(auth, formState.email.value, formState.password.value);
       const user = userCredential.user;
 			const userDoc = await getDoc(doc(db, "users", user.uid));
@@ -39,31 +41,34 @@ const LoginForm = React.memo((): JSX.Element => {
       }));
 
 			dispatch(setLike(userDoc.data().likes));
-			
-      alert("로그인 성공!");
 			navigate('/', { replace: true });
     } catch (error) {
+			setLoading(false);
 			if (error.code === "auth/invalid-credential") alert("아이디 및 비밀번호가 틀립니다.");
     }
   }
 
 	return (
 		<Form onSubmit={handleSubmit}>
-			<TextInput 
-				text={formState.email.value}
-				name="email"
-				setText={handleInputChange}
-				errorText={formState.email.errorText}
-				placeholder="아이디"  
-			/>
-			<PasswordInput 
-				password={formState.password.value} 
-				name="password"
-				setPassword={handleInputChange}
-				errorText={formState.password.errorText}
-				placeholder="비밀번호"  
-			/>
-			<Button text="로그인" width="232px" height="44px" disabled={false}/>
+			{loading ? <Loading /> :
+			<>
+				<TextInput 
+					text={formState.email.value}
+					name="email"
+					setText={handleInputChange}
+					errorText={formState.email.errorText}
+					placeholder="아이디"  
+				/>
+				<PasswordInput 
+					password={formState.password.value} 
+					name="password"
+					setPassword={handleInputChange}
+					errorText={formState.password.errorText}
+					placeholder="비밀번호"  
+				/>
+				<Button text="로그인" width="232px" height="44px" disabled={false}/>
+			</>
+			}
 		</Form>
 	)
 })
