@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface likesProps {
   id: string;
   title: string;
+  period: string;
 }
 
 interface userProps {
