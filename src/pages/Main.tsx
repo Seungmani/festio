@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
 import styled from '@emotion/styled';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from "../redux/store";
-import { setSearchTerm, setSortOption, setIsShowLike } from "../redux/filterSlice";
+import { AppDispatch, RootState } from "../redux/store";
+import { setSearchTerm, setSortOption } from "../redux/filterSlice";
 
 import FilterControls from "../components/Main/FilterControl";
 import Pagination from "../components/Main/Pagination";
@@ -18,7 +18,7 @@ const Main = () :JSX.Element => {
 	const { search, searchOption, sortOption, isShowLike } = useSelector((state: RootState) => state.filter); 
 	const [isPending, startTransition] = useTransition();
 
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 	const user = useSelector((state: RootState) => state.user);
 	const { data: apiData, loading } = useSelector((state: RootState) => state.apiData);
 
