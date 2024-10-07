@@ -14,7 +14,7 @@ const persistConfigData = {
 const periodicConfigUser = {
   key: 'user',
   storage: storageSession, 
-  whitelist: ['user', 'isAuthenticated'], 
+  whitelist: ['user', 'isAuthenticated', 'likes'], 
 }
 
 const persistedApiDataReducer = persistReducer(persistConfigData, apiDataReducer);

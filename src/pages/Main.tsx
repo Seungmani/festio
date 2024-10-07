@@ -22,9 +22,9 @@ const Main = () :JSX.Element => {
 	const user = useSelector((state: RootState) => state.user);
 	const { data: apiData, loading } = useSelector((state: RootState) => state.apiData);
 
-	// useEffect(() => {
-	// 	if (apiData.length === 0) dispatch(fetchData());
-	// }, [dispatch, apiData]);
+	useEffect(() => {
+		if (apiData.length === 0) dispatch(fetchData());
+	}, [dispatch, apiData]);
 
   const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = e.target.value;
@@ -56,23 +56,23 @@ const Main = () :JSX.Element => {
       });
     }
 
-    if (isShowLike) {
-      filteredData = filteredData.filter(item => user.likes.includes(item.localId));
+		if (isShowLike) {
+      filteredData = filteredData.filter(data => user.likes.some(like => like.id === data.localId));
     }
 
-  if (sortOption === "recent") {
-    return [...filteredData].sort((a, b) => {
-      const dateA = new Date(a.period.split('~')[0].trim());
-      const dateB = new Date(b.period.split('~')[0].trim());
-      return dateB.getTime() - dateA.getTime();
-    });
-  }
+		if (sortOption === "recent") {
+			return [...filteredData].sort((a, b) => {
+				const dateA = new Date(a.period.split('~')[0].trim());
+				const dateB = new Date(b.period.split('~')[0].trim());
+				return dateB.getTime() - dateA.getTime();
+			});
+		}
 
-  if (sortOption === "title") {
-    return [...filteredData].sort((a, b) => a.title.localeCompare(b.title));
-  }
+		if (sortOption === "title") {
+			return [...filteredData].sort((a, b) => a.title.localeCompare(b.title));
+		}
 
-  return filteredData;
+		return filteredData;
   }, [apiData, search, searchOption, isShowLike, sortOption]);
 
   const currentItems = useMemo(() => {

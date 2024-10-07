@@ -14,7 +14,6 @@ import { useEffect } from 'react';
 const Login = () :JSX.Element => {
 	const user = useSelector((state: RootState) => state.user);
 	const navigate = useNavigate();
-	console.log(user)
 	
   useEffect(() => {
     if (user.isAuthenticated) {

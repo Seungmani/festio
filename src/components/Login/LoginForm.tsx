@@ -30,7 +30,7 @@ const LoginForm = React.memo((): JSX.Element => {
 
 		try {
 			await setPersistence(auth, browserSessionPersistence);
-			// setLoading(true);
+			setLoading(true);
       const userCredential = await signInWithEmailAndPassword(auth, formState.email.value, formState.password.value);
       const user = userCredential.user;
 			const userDoc = await getDoc(doc(db, "users", user.uid));
@@ -42,7 +42,7 @@ const LoginForm = React.memo((): JSX.Element => {
       }));
 
 			dispatch(setLike(userDoc.data().likes));
-			// navigate('/', { replace: true });
+			navigate('/', { replace: true });
     } catch (error) {
 			setLoading(false);
 			console.error(error)

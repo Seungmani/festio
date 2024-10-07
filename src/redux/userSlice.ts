@@ -5,8 +5,14 @@ interface likesProps {
   title: string;
 }
 
+interface userProps {
+  uid: string;
+  phone: string;
+  email: string;
+}
+
 export interface UserSliceProps {
-	user: null | string;
+	user: null | userProps;
 	isAuthenticated: boolean;
   likes: likesProps[] | [];
 }
