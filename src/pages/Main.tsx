@@ -22,9 +22,9 @@ const Main = () :JSX.Element => {
 	const user = useSelector((state: RootState) => state.user);
 	const { data: apiData, loading } = useSelector((state: RootState) => state.apiData);
 
-	useEffect(() => {
-		if (apiData.length === 0) dispatch(fetchData());
-	}, [dispatch, apiData]);
+	// useEffect(() => {
+	// 	if (apiData.length === 0) dispatch(fetchData());
+	// }, [dispatch, apiData]);
 
   const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = e.target.value;

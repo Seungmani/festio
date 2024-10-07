@@ -5,17 +5,24 @@ import userReducer from "./userSlice";
 import filterReducer from "./filterSlice";
 import apiDataReducer from "./apiDataSlice";
 
-const persistConfig = {
+const persistConfigData = {
   key: 'apiData',
   storage: storageSession, 
   whitelist: ['data'], 
 };
 
-const persistedApiDataReducer = persistReducer(persistConfig, apiDataReducer);
+const periodicConfigUser = {
+  key: 'user',
+  storage: storageSession, 
+  whitelist: ['user', 'isAuthenticated'], 
+}
+
+const persistedApiDataReducer = persistReducer(persistConfigData, apiDataReducer);
+const persistedUserReducer = persistReducer(periodicConfigUser, userReducer);
 
 export const store = configureStore({
   reducer: {
-    user: userReducer,
+    user: persistedUserReducer,
     apiData: persistedApiDataReducer,
     filter: filterReducer,
   },

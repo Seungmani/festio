@@ -2,19 +2,16 @@ import React, { useCallback } from "react";
 import styled from '@emotion/styled';
 import Color from "../../constants/Color";
 import { signOut } from "firebase/auth";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../../firebase";
 import { clearUser } from "../../redux/userSlice";
 import { Link } from "react-router-dom";
 import { setIsShowLike } from "../../redux/filterSlice";
+import { RootState } from "../../redux/store";
 
-interface HeaderProps {
-	user: boolean;
-}
-
-const Header = React.memo(({user}: HeaderProps):JSX.Element => {
+const Header = React.memo(():JSX.Element => {
 	const dispatch = useDispatch();
-	
+	const user = useSelector((state: RootState) => state.user);
 	const handleLogout = useCallback(async (e: React.MouseEvent) => {
 		e.preventDefault();
     try {
@@ -32,7 +29,7 @@ const Header = React.memo(({user}: HeaderProps):JSX.Element => {
 			<H1 linkColor={Color.MAIN}>
 				<StyledLink to={"/"}>festio</StyledLink>
 			</H1>
-			{user ?
+			{user.isAuthenticated ?
 				<StyledLink to={"/"} onClick={handleLogout} replace>로그아웃</StyledLink> : 
 				<div>
 					<StyledLink to={"/login"}>로그인</StyledLink>

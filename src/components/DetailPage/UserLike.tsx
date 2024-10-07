@@ -11,15 +11,17 @@ import Toggle from "../Common/Toggle";
 const UserLike = React.memo(():JSX.Element => {
 	const user = useSelector((state: RootState) => state.user);
 	const info = useContext(PlayInfoContext);
-	const [isLike, setIsLike] = useState<boolean>(user.likes.includes(info.localId || ""));
+	const [isLike, setIsLike] = useState<boolean>(
+		!!user.likes.filter((like) => like.id === info.localId).length
+	);
 	const dispatch = useDispatch();
-	
-  const handleLikeToggle = useCallback(async () => {
-    const updatedLikes = isLike
-      ? user.likes.filter((like) => like !== info.localId)
-      : [...user.likes, info.localId];
 
-    dispatch(setLike(updatedLikes));
+	const handleLikeToggle = useCallback(async () => {
+    const updatedLikes = isLike
+      ? user.likes.filter((like) => like.id !== info.localId)
+      : [...user.likes, {id: info.localId, title: info.title}];
+
+			dispatch(setLike(updatedLikes));
 		
     if (user.user) {
       await setDoc(doc(db, "users", user.user.uid), {

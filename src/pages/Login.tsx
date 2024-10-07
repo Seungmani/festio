@@ -1,13 +1,27 @@
 import styled from '@emotion/styled';
 import Color from '../constants/Color';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import LoginForm from '../components/Login/LoginForm';
 import SnsLoginDiv from '../components/Login/SnsLoginDiv';
 import GreyContainer from '../components/Common/GreyContainer';
 
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import { useEffect } from 'react';
+
 
 const Login = () :JSX.Element => {
+	const user = useSelector((state: RootState) => state.user);
+	const navigate = useNavigate();
+	console.log(user)
+	
+  useEffect(() => {
+    if (user.isAuthenticated) {
+      alert("이미 로그인 했습니다.");
+      navigate('/', { replace: true });
+    }
+  }, []);
 
 	return (
 		<GreyContainer width="450px" height='450px'>

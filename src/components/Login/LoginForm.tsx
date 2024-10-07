@@ -30,20 +30,22 @@ const LoginForm = React.memo((): JSX.Element => {
 
 		try {
 			await setPersistence(auth, browserSessionPersistence);
-			setLoading(true);
+			// setLoading(true);
       const userCredential = await signInWithEmailAndPassword(auth, formState.email.value, formState.password.value);
       const user = userCredential.user;
 			const userDoc = await getDoc(doc(db, "users", user.uid));
-      dispatch(setUser({
+
+			dispatch(setUser({
         uid: user.uid,
         email: user.email,
         phone: userDoc.data().user.phone,
       }));
 
 			dispatch(setLike(userDoc.data().likes));
-			navigate('/', { replace: true });
+			// navigate('/', { replace: true });
     } catch (error) {
 			setLoading(false);
+			console.error(error)
 			if (error.code === "auth/invalid-credential") alert("아이디 및 비밀번호가 틀립니다.");
     }
   }

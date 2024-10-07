@@ -1,9 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+interface likesProps {
+  id: string;
+  title: string;
+}
 
 export interface UserSliceProps {
 	user: null | string;
 	isAuthenticated: boolean;
-  likes: string[];
+  likes: likesProps[] | [];
 }
 
 const initialState: UserSliceProps = {
@@ -24,9 +29,9 @@ const userSlice = createSlice({
       state.user = null;
       state.isAuthenticated = false;
     },
-    setLike(state, action) {
+    setLike(state, action: PayloadAction<likesProps[]>) {
       state.likes = action.payload;
-    },
+    }
   },
 });
 
