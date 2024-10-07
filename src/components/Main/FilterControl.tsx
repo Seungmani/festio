@@ -32,8 +32,8 @@ const FilterControls = React.memo(({ user, onSortChange }: FilterControlsProps):
 			<div>
 				<label htmlFor="sort">정렬 : </label>
 				<select name="sort" onChange={onSortChange} value={sortOption}>
-					<option value="default">기본</option>
 					<option value="recent">최신순</option>
+					<option value="old">오래된순</option>
 					<option value="title">제목순</option>
 				</select>
 			</div>

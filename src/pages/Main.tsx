@@ -68,6 +68,14 @@ const Main = () :JSX.Element => {
 			});
 		}
 
+		if (sortOption === "old") {
+			return [...filteredData].sort((a, b) => {
+				const dateA = new Date(a.period.split('~')[0].trim());
+				const dateB = new Date(b.period.split('~')[0].trim());
+				return dateA.getTime() - dateB.getTime();
+			});
+		}
+
 		if (sortOption === "title") {
 			return [...filteredData].sort((a, b) => a.title.localeCompare(b.title));
 		}

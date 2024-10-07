@@ -10,7 +10,7 @@ export interface FilterSliceProps {
 const initialState: FilterSliceProps = {
   search: "",
 	searchOption: "공연이름",
-	sortOption: "default",
+	sortOption: "recent",
 	isShowLike: false,
 };
 
