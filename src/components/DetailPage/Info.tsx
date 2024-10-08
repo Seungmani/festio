@@ -12,7 +12,7 @@ const Info = React.memo(():JSX.Element => {
 		<InfoDiv>
 			<UpperDiv>
 				<Title>{info.title}</Title>
-				<UserLike />
+				<UserLike userData={null} text="즐겨찾기"/>
 			</UpperDiv>
 			<Description description={info.description}/>
 			<EctText />

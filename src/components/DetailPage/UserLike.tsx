@@ -14,7 +14,7 @@ interface UserLikeProps {
 	period?: string;
 }
 
-const UserLike = React.memo(({ userData = null }: { userData: UserLikeProps | null }):JSX.Element => {
+const UserLike = React.memo(({ userData = null, text }: { userData: UserLikeProps | null, text ?:string }):JSX.Element => {
 	const user = useSelector((state: RootState) => state.user);
 	const contextData = useContext(PlayInfoContext);
   const info = userData || contextData;
@@ -26,8 +26,14 @@ const UserLike = React.memo(({ userData = null }: { userData: UserLikeProps | nu
 	const handleLikeToggle = useCallback(async () => {
     const updatedLikes = isLike
       ? user.likes.filter((like) => like.id !== info.localId)
-      : [...user.likes, {id: info.localId, title: info.title, period: info.period}];
+      : [...user.likes, 
+				...(info.localId && info.title && info.period 
+        ? [{ id: info.localId, title: info.title, period: info.period }] 
+        : [])
+			];
 
+
+			
 			dispatch(setLike(updatedLikes));
 		
     if (user.user) {
@@ -37,6 +43,9 @@ const UserLike = React.memo(({ userData = null }: { userData: UserLikeProps | nu
       });
     }
 
+		if (isLike) alert(`${info.title}가 즐겨찾기 목록에서 제거되었습니다.`);
+		else alert(`${info.title}가 즐겨찾기 목록에 추가되었습니다.`);
+
     setIsLike((prev) => !prev);
   }, [isLike, info.localId, user, dispatch]);
 
@@ -44,6 +53,7 @@ const UserLike = React.memo(({ userData = null }: { userData: UserLikeProps | nu
 		<>
 			{user.isAuthenticated ? 
 			<ToggleDiv onClick={handleLikeToggle}>
+				<Span>{text}</Span>
 				<Toggle type="like" like={isLike} />
 			</ToggleDiv>
 			: null}
@@ -60,6 +70,6 @@ const ToggleDiv = styled.div`
 `
 
 const Span = styled.span`
-  margin-left: 5px;
+  margin-right: 5px;
 	font-size: 16px;
 `
