@@ -14,6 +14,7 @@ const EctText = React.memo(() => {
 			<FlexDiv><TextInfo>기간 : </TextInfo><Text>{info.period}</Text></FlexDiv>
 			<FlexDiv><TextInfo>시간 : </TextInfo><Text>{info.time}</Text></FlexDiv>
 			<FlexDiv><TextInfo>링크 : </TextInfo><LinkText to={info.link}>{info.link}</LinkText></FlexDiv>
+			<FlexDiv><TextInfo>전화 : </TextInfo><LinkText to={info.call}>{info.call}</LinkText></FlexDiv>
 		</>
 	)
 })
