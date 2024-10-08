@@ -5,7 +5,8 @@ interface ColorType {
 	BLACK: string;
 	NAVER: string;
 	KAKAO: string;
-	RED: string
+	RED: string;
+	BLUE: string;
 }
 
 const Color: Readonly<ColorType> = Object.freeze({
@@ -16,6 +17,7 @@ const Color: Readonly<ColorType> = Object.freeze({
 	NAVER: "#03C75B",
 	KAKAO:  "#FFE90A",
 	RED: "red",
+	BLUE: "#007bff",
 });
 
 export default Color;
