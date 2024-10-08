@@ -24,12 +24,12 @@ const initialRegisterState = {
 
 const RegisterForm = React.memo((): JSX.Element => {
 	const { formState, handleInputChange } = useFormState(initialRegisterState);
-	const [isEmailDuplicate, setIsEmailDuplicate] = useState<boolean>(false);
+	const [isEmailDuplicate, setIsEmailDuplicate] = useState<boolean>(true);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
 	const disabled = formState.email.isValid &&
-		isEmailDuplicate &&
+		!isEmailDuplicate &&
 		formState.password.isValid &&
     formState.passwordCheck.isValid &&
     formState.name.isValid &&
@@ -71,8 +71,8 @@ const RegisterForm = React.memo((): JSX.Element => {
   return (
 		<Form onSubmit={handleSubmit}>
 			<FlexRow>
-				<H2>아이디</H2>
-				<EmailDuplicationBtn email={formState.email.value} setDuplicate={setIsEmailDuplicate} />
+				<InputTitle>아이디</InputTitle>
+				<EmailDuplicationBtn email={formState.email.value} duplicate={isEmailDuplicate} setDuplicate={setIsEmailDuplicate} />
 			</FlexRow>
 			<TextInput 
 				text={formState.email.value}
@@ -81,7 +81,7 @@ const RegisterForm = React.memo((): JSX.Element => {
 				errorText={formState.email.errorText}
 				placeholder="아이디"  
 			/>
-			<H2>비밀번호</H2>
+			<InputTitle>비밀번호</InputTitle>
 			<PasswordInput 
 				password={formState.password.value} 
 				name="password"
@@ -89,7 +89,7 @@ const RegisterForm = React.memo((): JSX.Element => {
 				errorText={formState.password.errorText}
 				placeholder="비밀번호"  
 			/>
-			<H2>비밀번호 확인</H2>
+			<InputTitle>비밀번호 확인</InputTitle>
 			<PasswordInput 
 				password={formState.passwordCheck.value} 
 				name="passwordCheck"
@@ -97,7 +97,7 @@ const RegisterForm = React.memo((): JSX.Element => {
 				errorText={formState.passwordCheck.errorText}
 				placeholder="비밀번호 확인"  
 			/>
-			<H2>이름</H2>
+			<InputTitle>이름</InputTitle>
 			<TextInput 
 				text={formState.name.value}
 				name="name"
@@ -105,7 +105,7 @@ const RegisterForm = React.memo((): JSX.Element => {
 				errorText={formState.name.errorText}
 				placeholder="이름" 
 			/>
-			<H2>번호</H2>
+			<InputTitle>번호</InputTitle>
 			<TextInput 
 				text={formState.phone.value}
 				name="phone"
@@ -128,10 +128,10 @@ const Form = styled.form`
 	margin-top: 20px;
 `
 
-const H2 = styled.h2`
+const InputTitle = styled.p`
   margin: 0;
   margin-bottom: 5px;
-  font-size: 20px;
+  font-size: 16px;
 `
 
 const FlexRow = styled.div`

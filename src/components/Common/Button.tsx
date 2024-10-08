@@ -9,7 +9,7 @@ interface ButtonProps {
 	disabled: boolean;
 }
 
-const Button = React.memo(({text, width, height, disabled}: ButtonProps): JSX.Element => {
+const Button = React.memo(({text, width, height, disabled, }: ButtonProps): JSX.Element => {
 	return (
 		<StyledButton disabled={disabled} width={width} height={height} type="submit">{text}</StyledButton>
 	)

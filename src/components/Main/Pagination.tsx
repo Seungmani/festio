@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import Color from '../../constants/Color';
 
 interface PaginationProps {
   currentPage: number;
@@ -34,7 +35,7 @@ const Pagination: React.FC<PaginationProps> = ({
   const pageNumbers = getPageNumbers();
 
   return (
-    <PaginationContainer>
+    <PaginationDIV>
       <Button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
@@ -58,13 +59,13 @@ const Pagination: React.FC<PaginationProps> = ({
       >
         다음
       </Button>
-    </PaginationContainer>
+    </PaginationDIV>
   );
 };
 
 export default Pagination;
 
-const PaginationContainer = styled.div`
+const PaginationDIV = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,13 +75,13 @@ const PaginationContainer = styled.div`
 const Button = styled.button`
   background: none;
   border: none;
-  color: #007bff;
+  color: ${Color.BLUE};
   cursor: pointer;
   margin: 0 10px;
   font-size: 16px;
 
   &:disabled {
-    color: #ccc;
+    color: ${Color.GREY};
     cursor: not-allowed;
   }
 `;
@@ -88,7 +89,7 @@ const Button = styled.button`
 const PageNumber = styled.button<{ active: boolean }>`
   background: none;
   border: none;
-  color: ${(props) => (props.active ? '#007bff' : '#000')};
+  color: ${(props) => (props.active ? Color.BLUE : Color.BLACK)};
   cursor: pointer;
   margin: 0 5px;
   font-size: 16px;
