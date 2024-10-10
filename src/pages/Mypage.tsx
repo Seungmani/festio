@@ -3,15 +3,14 @@ import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import Color from '../constants/Color';
 import UserLike from '../components/DetailPage/UserLike';
-import Calendar from '../components/Mypage/Calendar';
+import Review from '../components/Review/Review';
 
 const MyPage = () :JSX.Element => {
 	const user = useSelector((state: RootState) => state.user);
-
 	const navigate = useNavigate();
 	
   useEffect(() => {
@@ -26,25 +25,24 @@ const MyPage = () :JSX.Element => {
 		const dateB = new Date(b.period.split('~')[0].trim());
 		return dateB.getTime() - dateA.getTime();
 	}), []); // 의존성 제거를 통해 잘 못 눌렀을 경우 값이 사라지지 않게 유지
-	console.log(user, 'likes', likes)
+
+
 	return (
 		<Container>
 			<LikeList>
-			<List head={true}>
-				<Period head={true}>기간</Period> 
-				<Title head={true}>제목</Title>
-				<Like head={true}>선호</Like>
-			</List>
-			{likes.map(({period, title, id: localId}) => 
-				<List head={false} key={title}>
-					<Period head={false}>{period}</Period> 
-					<Title head={false}>{title}</Title>
-					<UserLike userData={{period, title, localId}}/>
+				<List>
+					<h1>좋아요 보관함</h1>
 				</List>
-			)}
+				{likes.map(({period, title, id: localId}, index) => 
+					<List key={title}>
+						<Circle><Number>{index + 1}</Number></Circle>
+						<Title to={`/DetailPage/${localId}`}>{title}</Title>
+						<Period>({period})</Period> 
+						<UserLike userData={{period, title, localId}}/>
+					</List>
+				)}
 			</LikeList>
-
-			<Calendar/>
+			<Review type="uid" id={user.user.uid}/>
 		</Container>
 	)
 }
@@ -53,6 +51,7 @@ export default MyPage;
 
 const Container = styled.div`
 	display: flex;
+	justify-content: space-between;
 
   max-width: 1280px;
 	margin: 0 auto;
@@ -60,51 +59,56 @@ const Container = styled.div`
 `
 
 const LikeList = styled.div`
-	width: 500px;
-	min-height: 400px;
+	width: 600px;
 `
 
-const List = styled.div<{head: boolean}>`
+const List = styled.div`
 	display: flex;
+	align-items: flex-end;
+	gap: 10px;
+
 	width: 100%;
-	height: 30px;
-	line-height: 30px;
+	height: 50px;
 
-	font-size: ${(props) => props.head ? "24px" : "16px"};
-	color: ${(props) => props.head ? Color.WHITE : Color.BLACK};
-  border-bottom: 1px solid #ddd;
+	color: ${Color.BLACK};
 `
 
-const Period = styled.p<{head: boolean}>`
-	width: 225px;
-	text-align: center;
+const Circle = styled.div`
+	position: relative;
 
-  background-color: ${(props) => props.head ? Color.GREY : Color.WHITE};
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	border-right: 1px solid ${Color.WHITE};
+	width: 32px;
+	height: 32px;
+	line-height: 32px;
+
+	border-radius: 32px;
+
+	text-align: center;
+	background-color: ${Color.GREY};
 `
 
-const Title = styled.p<{head: boolean}>`
-	width: 200px;
+const Number = styled.p`
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 
-  background-color: ${(props) => props.head ? Color.GREY : Color.WHITE};
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	border-right: 1px solid ${Color.WHITE};
+	font-size: 24px;
+	color: ${Color.WHITE};
+`
 
-	text-align: center;
+const Title = styled(Link)`
+  color: ${Color.BLACK};
+	text-decoration: none;
+
+	max-width: 300px;
+	font-size: 24px;
 	overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   word-break: break-all;
 `
 
-const Like = styled.p<{head: boolean}>`
-	width: 75px;
-	text-align: center;
-
-  background-color: ${(props) => props.head ? Color.GREY : Color.WHITE};
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
+const Period = styled.p`
+	width: 190px;
+	font-size: 16px;
 `

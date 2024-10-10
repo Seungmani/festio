@@ -9,6 +9,7 @@ import { useParams } from 'react-router';
 import Loading from '../components/Common/Loading';
 import Img from '../components/DetailPage/Img';
 import Info from '../components/DetailPage/Info';
+import Review from '../components/Review/Review';
 
 export const PlayInfoContext = createContext({
   "duration": "",
@@ -51,12 +52,15 @@ const DetailPage = React.memo(() :JSX.Element => {
   }
 
 	return (
+    <>    
     <Container>
       <PlayInfoContext.Provider value={info}>
         <Img/>
         <Info/>
       </PlayInfoContext.Provider>
     </Container>
+    <Review type="localId" id={info.localId}/>
+    </>
 	)
 });
 
