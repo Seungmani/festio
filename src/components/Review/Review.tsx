@@ -1,9 +1,11 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { db } from "../../firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import styled from "@emotion/styled";
 import ReviewAdd from "./ReviewAdd";
 import ReviewItem from "./ReviewItem";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 interface ReviewProps {
 	type: string;
@@ -11,6 +13,7 @@ interface ReviewProps {
 }
 
 interface ReviewInfoProps {
+  title: string;
 	date: string;
 	comment: string;
 	localId: string;
@@ -18,11 +21,12 @@ interface ReviewInfoProps {
 
 const Review = React.memo(({ type, id }: ReviewProps):JSX.Element => {
   const [reviews, setReviews] = useState<ReviewInfoProps[]>([]);
+  const user = useSelector((state: RootState) => state.user);
 
-	const timeToString = (timestamp) => {
+	const timeToString = useCallback((timestamp) => {
 		const date = timestamp.toDate();
 		return date.toLocaleString();
-	}
+	}, []);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -37,11 +41,10 @@ const Review = React.memo(({ type, id }: ReviewProps):JSX.Element => {
             getData.push({
               date: timeToString(doc.data().updatedAt),
               comment: doc.data().comment,
+              title: doc.data().title,
               localId: doc.data().localId,
             });
           });
-        } else {
-          console.log("No reviews found");
         }
       } catch (error) {
         console.log("Error getting reviews: ", error);
@@ -51,24 +54,22 @@ const Review = React.memo(({ type, id }: ReviewProps):JSX.Element => {
     };
 
     fetchReviews();
-  }, [type, id]); 
-
-	console.log("TTTt", reviews)
+  }, [type, id, timeToString]); 
 
 	return (
 		<Container>
-			<div>
+			<RowDiv>
 				<h1>리뷰</h1>
-				{type === "localId" && <ReviewAdd localId={id}/>}
-    	</div>
+				{(type === "localId" && user.user?.uid !== undefined) ? <ReviewAdd localId={id}/> : null}
+    	</RowDiv>
 			<ReviewList>
-        {reviews.map((review, index) => (
+        {reviews.length > 0 ? reviews.map((review, index) => (
           <ReviewItem key={index}
-						title={review.localId}
+						title={type === "localId" ? user.user.uid : review.title}
 						date={review.date}
 						comment={review.comment}
 					/>
-        ))}
+        )) : <p>등록된 리뷰가 없습니다.</p>}
       </ReviewList>
 		</Container>
 	)
@@ -78,6 +79,11 @@ export default Review;
 
 const Container = styled.div`
 	width: 600px;
+`
+
+const RowDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
 `
 
 const ReviewList = styled.ul`

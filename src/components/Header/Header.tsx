@@ -6,7 +6,6 @@ import AuthLink from "./AuthLink";
 
 
 const Header = React.memo(():JSX.Element => {
-
 	return (
 		<HeaderDiv>
 			<H1 linkColor={Color.MAIN}>
@@ -20,10 +19,12 @@ const Header = React.memo(():JSX.Element => {
 export default Header;
 
 const HeaderDiv = styled.div`
+	position: sticky;
+
 	max-width: 1280px;
 	width: 100%;
 	height: 50px;
-	margin: 30px auto;
+	margin: 0 auto;
 	
 	display: flex;
 	flex-direction: row;

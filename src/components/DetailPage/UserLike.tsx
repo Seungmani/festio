@@ -32,8 +32,6 @@ const UserLike = React.memo(({ userData = null, text }: { userData: UserLikeProp
         : [])
 			];
 
-
-			
 			dispatch(setLike(updatedLikes));
 		
     if (user.user) {

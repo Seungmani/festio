@@ -52,15 +52,15 @@ const DetailPage = React.memo(() :JSX.Element => {
   }
 
 	return (
-    <>    
     <Container>
       <PlayInfoContext.Provider value={info}>
-        <Img/>
-        <Info/>
+        <ContextDiv>
+            <Img/>
+            <Info/>
+        </ContextDiv>
+        <Review type="localId" id={info.localId}/>
       </PlayInfoContext.Provider>
     </Container>
-    <Review type="localId" id={info.localId}/>
-    </>
 	)
 });
 
@@ -70,6 +70,8 @@ const Container = styled.div`
 	width: 1280px;
 	margin: 30px auto;
 	padding: 0;
+`
 
+const ContextDiv = styled.div`
 	display: flex;
 `
