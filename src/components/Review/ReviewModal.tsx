@@ -124,7 +124,7 @@ const ModalContent = styled.div`
   padding: 20px;
 
   background-color: ${Color.WHITE};
-  border-radius: 10px;
+  border-radius: 20px;
   text-align: center;
 `;
 

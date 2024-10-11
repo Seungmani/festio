@@ -1,18 +1,20 @@
 import styled from "@emotion/styled";
-import React, { useContext } from "react";
-import { PlayInfoContext } from "../../pages/DetailPage";
+import React from "react";
+import { Link } from "react-router-dom";
 
 interface ReviewItemProps {
-	title: string;
+	title?: string;
 	date: string;
 	comment: string;
+	rating: string;
+	localId: string;
 }
 
-const ReviewItem = React.memo(({title, date, comment}: ReviewItemProps):JSX.Element => {
-	const info = useContext(PlayInfoContext);
+const ReviewItem = React.memo(({title, date, comment, rating, localId}: ReviewItemProps):JSX.Element => {
 	return (
 		<Item>
-			<strong>{title}</strong> ({date})
+			<Link to={`/DetailPage/${localId}`}>{title}</Link> ({date})
+			<p>{rating}</p>
 			<p>{comment}</p>
 		</Item>
 	)

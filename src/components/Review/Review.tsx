@@ -17,6 +17,7 @@ interface ReviewInfoProps {
 	date: string;
 	comment: string;
 	localId: string;
+  rating: string;
 }
 
 const Review = React.memo(({ type, id }: ReviewProps):JSX.Element => {
@@ -43,6 +44,7 @@ const Review = React.memo(({ type, id }: ReviewProps):JSX.Element => {
               comment: doc.data().comment,
               title: doc.data().title,
               localId: doc.data().localId,
+              rating: doc.data().rating,
             });
           });
         }
@@ -62,15 +64,31 @@ const Review = React.memo(({ type, id }: ReviewProps):JSX.Element => {
 				<h1>리뷰</h1>
 				{(type === "localId" && user.user?.uid !== undefined) ? <ReviewAdd localId={id}/> : null}
     	</RowDiv>
-			<ReviewList>
+      {type === "localId" && 			
+      <ReviewList>
         {reviews.length > 0 ? reviews.map((review, index) => (
           <ReviewItem key={index}
-						title={type === "localId" ? user.user.uid : review.title}
 						date={review.date}
 						comment={review.comment}
+            rating={review.rating}
+            localId={review.localId}
 					/>
         )) : <p>등록된 리뷰가 없습니다.</p>}
       </ReviewList>
+      }
+      {type === "uid" && 			
+      <ReviewList>
+        {reviews.length > 0 ? reviews.map((review, index) => (
+          <ReviewItem key={index}
+						title={review.title}
+						date={review.date}
+						comment={review.comment}
+            rating={review.rating}
+            localId={review.localId}
+					/>
+        )) : <p>등록된 리뷰가 없습니다.</p>}
+      </ReviewList>
+      }
 		</Container>
 	)
 })
