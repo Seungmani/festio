@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setUser, setLike } from "../../redux/userSlice";
+import { setLike } from "../../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 
@@ -51,12 +51,6 @@ const RegisterForm = React.memo((): JSX.Element => {
 				likes: [],
         createdAt: new Date(),
       });
-
-      dispatch(setUser({
-        uid: user.uid,
-        email: user.email,
-        phone: formState.phone.value,
-      }));
 
 			dispatch(setLike([]));
 
