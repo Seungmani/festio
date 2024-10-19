@@ -61,7 +61,7 @@ const Review = React.memo(({ type, id }: ReviewProps):JSX.Element => {
 	return (
 		<Container>
 			<RowDiv>
-				<h1>리뷰</h1>
+				<h2>리뷰</h2>
 				{(type === "localId" && user.user?.uid !== undefined) ? <ReviewAdd localId={id}/> : null}
     	</RowDiv>
       {type === "localId" && 			

@@ -1,23 +1,7 @@
 import styled from "@emotion/styled";
-import React, { useEffect, useCallback, useRef, useState } from "react";
-import Toggle from "../Common/Toggle";
+import React, { useCallback } from "react";
 
 const Description = React.memo(({description}: {description: string}) => {
-	const textRef = useRef<HTMLParagraphElement | null>(null);
-	const [isShowAll, setIsShowAll] = useState<boolean>(false);
-	const [isTextHide, setIsTextHide] = useState<boolean>(false);
-	
-	useEffect(() => {
-		if (textRef.current) {
-			const height = textRef.current.scrollHeight;
-			if (height > 195) {
-				setIsTextHide(true);
-				setIsShowAll(false);
-			} else {
-				setIsShowAll(true);
-			}
-		}
-	}, []); 
 
 	const decodeHTMLEntities = useCallback((html: string) => {		
     const parser = new DOMParser();
@@ -33,16 +17,7 @@ const Description = React.memo(({description}: {description: string}) => {
 	return (
 		<FlexDiv>
 			<TextInfo>설명 : </TextInfo>
-			<div>
-				<Text isShowAll={isShowAll} ref={textRef}>{decodeHTMLEntities(description)}
-				</Text>
-				{
-				isTextHide &&
-				<ToggleDiv onClick={() => setIsShowAll((prev) => !prev)}>
-					<Toggle type="more" more={isShowAll}/>
-				</ToggleDiv>
-				}
-			</div>
+			<Text>{decodeHTMLEntities(description)}</Text>
 		</FlexDiv>
 	)
 });
@@ -51,6 +26,7 @@ export default Description;
 
 const FlexDiv = styled.div`
 	display: flex;
+	margin-bottom: 10px;
 `
 
 const TextInfo = styled.p`
@@ -58,18 +34,14 @@ const TextInfo = styled.p`
 	font-size: 16px;
 `
 
-const Text = styled.p<{isShowAll: boolean}>`
+const Text = styled.p`
 	width: 750px;
-	height: ${(props) => props.isShowAll ? "auto" : " 195px"};
+	height: 195px;
 	margin-right: 5px;
 
 	font-size: 16px;
-	overflow: hidden;
+	overflow-y: scroll;
   text-overflow: ellipsis;
   word-break: break-all;
 	white-space: pre-wrap;
-`
-
-const ToggleDiv = styled.div`
-	float: right;
 `

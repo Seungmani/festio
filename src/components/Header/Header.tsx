@@ -20,6 +20,7 @@ export default Header;
 
 const HeaderDiv = styled.div`
 	position: sticky;
+	top: 0;
 
 	max-width: 1280px;
 	width: 100%;
@@ -30,8 +31,10 @@ const HeaderDiv = styled.div`
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
+	z-index: 9999;
 
-	border-bottom: 1px solid ${Color.BLACK};
+	border-bottom: 1px solid ${Color.GREY};
+	background-color: ${Color.WHITE};
 `
 
 const H1 = styled.h1<{ linkColor?: string }>`
