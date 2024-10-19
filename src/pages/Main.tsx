@@ -59,6 +59,8 @@ const Main = () :JSX.Element => {
 		if (isShowLike) {
       filteredData = filteredData.filter(data => user.likes.some(like => like.id === data.localId));
     }
+		
+		setCurrentPage(1);
 
 		if (sortOption === "recent") {
 			return [...filteredData].sort((a, b) => {
@@ -79,7 +81,6 @@ const Main = () :JSX.Element => {
 		if (sortOption === "title") {
 			return [...filteredData].sort((a, b) => a.title.localeCompare(b.title));
 		}
-
 		return filteredData;
   }, [apiData, search, searchOption, isShowLike, sortOption]);
 
@@ -89,7 +90,6 @@ const Main = () :JSX.Element => {
   }, [currentPage, filteredAndSortedData]);
 
   const totalPages = useMemo(() => Math.ceil(filteredAndSortedData.length / ITEMS_PER_PAGE), [filteredAndSortedData]);
-
 
 	return (
 		<Container>
