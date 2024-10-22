@@ -13,35 +13,30 @@
 ## 폴더 구조
 ```text
 /src
+-/assets
+
 -/components
--- common = 컴포넌트에서 공통으로 사용
+-- common
 -- Header
 -- Login
 -- Register
 -- Main
 -- DetailPage
--- UserProper
 -- Mypage
 
+-/ constants
+
 -/redux
--- store
--- userSlice
--- filterSlice
--- apiDataSlice
 
 -/router
--- Router
 
 -/ hooks
--- validate
--- fetchData
 
 -/ pages
 -- Login
 -- Register
 -- Main
 -- ConcertInfo
--- UserProper
 -- Mypage
 ```
 
