@@ -2,10 +2,13 @@
 [노션 링크](https://www.notion.so/e273980c10414efdb62e0667822771bb?d=748129315fa941b3bbd851a87e1df232)
 
 ## 기술 스택
-<img src="https://blog.mindgrub.com/hubfs/Blog_Images/Thumbnail-React-Native-Blog.jpeg" alt="React" width="100" height="100" />
-<img src="https://user-images.githubusercontent.com/52682603/138834262-a7af2293-e398-416d-8dd3-ff5fab8cb80d.png" alt="TypeScript" width="100" height="100" />
-<img src="https://user-images.githubusercontent.com/52682603/138835731-e0e727ad-0bd1-44ca-a3b3-98c4d1b89c20.png" alt="Redux-Query" width="100" height="100" />
-<img src="https://user-images.githubusercontent.com/52682603/138834258-c4b4a706-3a7e-40c8-8a08-c0ac4815d7e0.png" alt="Emotion" width="100" height="100" />
+<div style="display: flex; gap: 10px;">
+	<img src="https://blog.mindgrub.com/hubfs/Blog_Images/Thumbnail-React-Native-Blog.jpeg" alt="React" width="100" height="100" />
+	<img src="https://user-images.githubusercontent.com/52682603/138834262-a7af2293-e398-416d-8dd3-ff5fab8cb80d.png" alt="TypeScript" width="100" height="100" />
+	<img src="https://user-images.githubusercontent.com/52682603/138835731-e0e727ad-0bd1-44ca-a3b3-98c4d1b89c20.png" alt="Redux-Query" width="100" height="100" />
+	<img src="https://user-images.githubusercontent.com/52682603/138834258-c4b4a706-3a7e-40c8-8a08-c0ac4815d7e0.png" alt="Emotion" width="100" height="100" />
+</div>
+
 
 ## 폴더 구조
 ```text
