@@ -10,7 +10,7 @@ import { AppDispatch } from '../redux/store';
 
 export const fetchData = () => async (dispatch: AppDispatch) => {
   dispatch(fetchApiDataStart());
-
+	
   try {
     const apiDataRef = collection(db, 'apiData');
     const apiDataSnapshot = await getDocs(apiDataRef);

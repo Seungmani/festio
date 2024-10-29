@@ -15,7 +15,7 @@ const Router = (): JSX.Element => {
 	const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
 
 	return (
-		<Suspense fallback={"Loading..."}>
+		<Suspense fallback={<></>}>
 			{!isAuthPage && <Header />}
 			<Routes>
 				<Route path="*" element={<Error />} />

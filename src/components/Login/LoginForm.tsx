@@ -34,11 +34,10 @@ const LoginForm = React.memo((): JSX.Element => {
       const userCredential = await signInWithEmailAndPassword(auth, formState.email.value, formState.password.value);
       const user = userCredential.user;
 			const userDoc = await getDoc(doc(db, "users", user.uid));
-
 			dispatch(setUser({
         uid: user.uid,
         email: user.email,
-        phone: userDoc.data().user.phone,
+        phone: userDoc.data().phone,
       }));
 
 			dispatch(setLike(userDoc.data().likes));

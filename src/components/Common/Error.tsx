@@ -24,7 +24,7 @@ const ErrorDiv = styled.div`
 `
 
 const ErrorText = styled.p<{errorMessage: string}>`
-  font-size: 12px;
+  font-size: 10px;
   color: ${(props) => props.errorMessage !== "" ? Color.RED : Color.WHITE};
 	white-space: pre-wrap;
 	margin: 0
